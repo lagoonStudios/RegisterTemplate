@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 
-import Button from "../../components/atoms/Button";
-import Div from "../../components/atoms/Div";
-import H1 from "../../components/atoms/H1";
-import Input from "../../components/atoms/Input/Input";
-import Main from "../../components/atoms/Main";
-import Span from "../../components/atoms/Span";
+import Button from "../../atoms/Button";
+import Div from "../../atoms/Div";
+import H1 from "../../atoms/H1";
+import Input from "../../atoms/Input/Input";
+import Main from "../../atoms/Main";
+import Span from "../../atoms/Span";
 import { sendEmail } from "./Register.functions";
 
 export default function Register(){
