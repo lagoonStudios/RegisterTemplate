@@ -7,6 +7,7 @@ import H1 from "../../components/atoms/H1";
 import Input from "../../components/atoms/Input/Input";
 import Main from "../../components/atoms/Main";
 import Span from "../../components/atoms/Span";
+import { sendEmail } from "./Register.functions";
 
 export default function Register(){
   // --- Hooks -----------------------------------------------------------------
@@ -18,6 +19,7 @@ export default function Register(){
   const formik = useFormik({
     initialValues: { name: '', email: '', id: '' },
     onSubmit: (values) => {
+      sendEmail(values.name, values.email);
       console.log(values);
     },
     validationSchema,
@@ -36,7 +38,7 @@ export default function Register(){
   // --- Side effects ----------------------------------------------------------
   // --- END: Side effects -----------------------------------------------------
 
-  // --- Data and handlers -----------------------------------------------------
+  // --- Data and handlers -----------------------------------------------------  
   // --- END: Data and handlers ------------------------------------------------
   return <>
     <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
