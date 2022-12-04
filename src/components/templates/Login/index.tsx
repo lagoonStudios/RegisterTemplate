@@ -1,13 +1,14 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import Button from "../../components/atoms/Button";
-import Div from "../../components/atoms/Div";
-import H1 from "../../components/atoms/H1";
-import Input from "../../components/atoms/Input/Input";
-import Main from "../../components/atoms/Main";
+import Button from "../../atoms/Button";
+import Div from "../../atoms/Div";
+import H1 from "../../atoms/H1";
+import Input from "../../atoms/Input/Input";
+import Main from "../../atoms/Main";
+import { ILogin } from './Login.types';
 
-export default function Login() {
+export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
     username: Yup.string().required('Required'),
@@ -20,6 +21,7 @@ export default function Login() {
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
       console.log(values);
+      setState(1);
     },
     validationSchema,
   });

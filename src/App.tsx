@@ -1,21 +1,23 @@
 import React, { lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-const RegisterScreen = lazy(() => import('./pages/Register/index'));
-const LoginScreen = lazy(() => import('./pages/Login/index'));
+const MainScreen = lazy(() => import('./pages/Main/index'));
 /**
  * @returns {JSX.Element} The main Application
  */
 function App(): JSX.Element {
   return (
-      <Router>
-        <React.Suspense >
-          <Routes>
-            <Route path="/" element={<LoginScreen />} />
-            <Route path="/register" element={<RegisterScreen />} />
-          </Routes>
-        </React.Suspense>
-      </Router>
+    <Router>
+      <React.Suspense >
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="RegisterPage/" />}
+          />
+          <Route path="RegisterPage/" element={<MainScreen />} />
+        </Routes>
+      </React.Suspense>
+    </Router>
   );
 }
 
