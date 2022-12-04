@@ -1,3 +1,4 @@
+import toastNotify from 'react-hot-toast';
 import { collection, addDoc } from "firebase/firestore"; 
 import { useFormik } from "formik";
 import * as Yup from 'yup';
@@ -21,7 +22,7 @@ export default function Register(){
   })
   const formik = useFormik({
     initialValues: { name: '', email: '', id: '' },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm, setValues }) => {
       await addDoc(collection(firestore, "Registers"), {
         name: values.name,
         email: values.email,
@@ -29,9 +30,11 @@ export default function Register(){
         donative: true,
         attendance: false,
       })
-      .then((e) => {
+      .then(() => {
+        toastNotify.success('Datos registrado Exitosamente!');
         sendEmail(values.name, values.email);
-        console.log("Document: ", e);
+        setValues({ name: '', email: '', id: '' });
+        resetForm({values: { name: '', email: '', id: '' } })
       });
     },
     validationSchema,

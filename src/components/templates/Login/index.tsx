@@ -20,7 +20,6 @@ export default function Login({ setState }: ILogin) {
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
-      console.log(values);
       setState(1);
     },
     validationSchema,
