@@ -1,3 +1,4 @@
+import { collection, addDoc } from "firebase/firestore"; 
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 
@@ -7,6 +8,8 @@ import H1 from "../../atoms/H1";
 import Input from "../../atoms/Input/Input";
 import Main from "../../atoms/Main";
 import Span from "../../atoms/Span";
+
+import { firestore } from '../../../config/firebase';
 import { sendEmail } from "./Register.functions";
 
 export default function Register(){
@@ -18,9 +21,18 @@ export default function Register(){
   })
   const formik = useFormik({
     initialValues: { name: '', email: '', id: '' },
-    onSubmit: (values) => {
-      sendEmail(values.name, values.email);
-      console.log(values);
+    onSubmit: async (values) => {
+      await addDoc(collection(firestore, "Registers"), {
+        name: values.name,
+        email: values.email,
+        id: values.id,
+        donative: true,
+        attendance: false,
+      })
+      .then((e) => {
+        sendEmail(values.name, values.email);
+        console.log("Document: ", e);
+      });
     },
     validationSchema,
   });
