@@ -30,8 +30,7 @@ export default function Register(){
         attendance: false,
       })
       .then((e) => {
-        sendEmail(values.name, values.email);
-        console.log("Document: ", e);
+        sendEmail(values.name, values.email, values.id);
       });
     },
     validationSchema,
@@ -97,7 +96,7 @@ export default function Register(){
         >
           Registrar
         </Button>
-      </form >      
+      </form >   
     </Main>
   </>
 }
