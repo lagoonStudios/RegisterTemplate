@@ -12,7 +12,7 @@ export const sendEmail = (to_name: string, to_email: string) => {
   emailjs
     .send(
       "service_8rujj47",
-      "template_t29chmv",
+      "template_ri8cnoo",
       templateParams,
       "cgmGhlqI_1tJf45Y3"
     )
