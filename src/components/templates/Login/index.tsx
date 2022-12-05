@@ -7,6 +7,7 @@ import H1 from "../../atoms/H1";
 import Input from "../../atoms/Input/Input";
 import Main from "../../atoms/Main";
 import { ILogin } from './Login.types';
+import { users } from '../../../constants/users';
 
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
@@ -20,8 +21,9 @@ export default function Login({ setState }: ILogin) {
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
-      console.log(values);
-      setState(1);
+      let compare = users.find((v) => {return v.UserName === values.username && v.Password === values.password});
+      if(compare != undefined) setTimeout(() => {setState(1)}, 3000);
+      
     },
     validationSchema,
   });
