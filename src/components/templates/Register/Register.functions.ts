@@ -1,13 +1,14 @@
 import emailjs from "@emailjs/browser";
 
-export const sendEmail = (to_name: string, to_email: string) => {
+export const sendEmail = (to_name: string, to_email: string, id: string) => {
   const templateParams = {
     to_name,
     to_email,
     qr:
-      "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=&" +
-      to_email,
+      "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" +
+      id,
   };
+  console.log('template: ', templateParams);
   // serviceId, templateId, templateParams, publicKey
   emailjs
     .send(
