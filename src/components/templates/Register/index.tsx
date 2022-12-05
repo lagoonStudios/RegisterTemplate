@@ -5,6 +5,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import toastNotify from 'react-hot-toast';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -27,12 +28,12 @@ export default function Register() {
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
-    onSubmit: async (values) => {
+    onSubmit: async (values,  { setValues, resetForm }) => {
       const q = query( collection(firestore, "Registers"), where("id", "==", values.id) );
       const unsubscribe = onSnapshot(
         q,
         async (querySnapshot) => {
-          if (querySnapshot.size == 0) {
+          if (querySnapshot.size === 0) {
             await addDoc(collection(firestore, "Registers"), {
               name: values.name,
               email: values.email,
@@ -41,7 +42,10 @@ export default function Register() {
               attendance: false,
             }).then((e) => {
               unsubscribe();
+              toastNotify.success('Datos registrado Exitosamente!');
               sendEmail(values.name, values.email, values.id);
+              setValues({ name: '', email: '', id: '' });
+              resetForm({values: { name: '', email: '', id: '' } })
             });
           } else return;
         },
