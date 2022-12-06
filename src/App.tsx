@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const MainScreen = lazy(() => import('./pages/Main/index'));
 /**
@@ -10,11 +10,7 @@ function App(): JSX.Element {
     <Router>
       <React.Suspense >
         <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="RegisterPage/" />}
-          />
-          <Route path="RegisterPage/" element={<MainScreen />} />
+          <Route path="/" element={<MainScreen />} />
         </Routes>
       </React.Suspense>
     </Router>
