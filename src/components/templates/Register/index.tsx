@@ -5,6 +5,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import Select from 'react-select';
 import toastNotify from 'react-hot-toast';
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -15,11 +16,15 @@ import H1 from "../../atoms/H1";
 import Input from "../../atoms/Input/Input";
 import Main from "../../atoms/Main";
 import Span from "../../atoms/Span";
+import Spinner from "../../molecules/Spinner";
 
 import { firestore } from "../../../config/firebase";
 import { sendEmail } from "./Register.functions";
+import { useState } from "react";
+import { customStyles, options } from "./Register.constants";
+import { IRegister } from "./Register.types";
 
-export default function Register() {
+export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
@@ -28,8 +33,9 @@ export default function Register() {
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
-    onSubmit: async (values,  { setValues, resetForm }) => {
-      const q = query( collection(firestore, "Registers"), where("id", "==", values.id) );
+    onSubmit: async (values) => {
+      setLoading(true);
+      const q = query(collection(firestore, "Registers"), where("id", "==", values.id));
       const unsubscribe = onSnapshot(
         q,
         async (querySnapshot) => {
@@ -39,18 +45,23 @@ export default function Register() {
               email: values.email,
               id: values.id,
               donative: true,
+              donative_type: donative_type?.value,
               attendance: false,
-            }).then((e) => {
+            }).then(() => {
               unsubscribe();
+              setLoading(false);
+              setState(2);
               toastNotify.success('Datos registrado Exitosamente!');
               sendEmail(values.name, values.email, values.id);
-              setValues({ name: '', email: '', id: '' });
-              resetForm({values: { name: '', email: '', id: '' } })
+            }).catch(() => {
+              setLoading(false)
+              toastNotify.error('Error Registrando Datos');
             });
           } else return;
         },
         (err) => {
           console.log("error: ", err);
+          toastNotify.error('Error Registrando Datos');
         }
       );
     },
@@ -59,6 +70,8 @@ export default function Register() {
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
+  const [donative_type, setDonative] = useState(options[0]);
+  const [loading, setLoading] = useState(false);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -71,6 +84,7 @@ export default function Register() {
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
+  const handler = (e: any) => setDonative(e);
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -112,14 +126,21 @@ export default function Register() {
               customClassNames="w-full border-b-2 border-black"
             />
             <Span>Tipo de Donativo</Span>
+            <Select
+              options={options}
+              styles={customStyles}
+              onChange={(e) => handler(e)}
+              defaultValue={options[0]}
+            />
           </Div>
           <Button
-            onClick={() => {}}
+            onClick={() => { }}
             onClickValue={true}
             customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-lg text-white text-lg"
             type="submit"
+            isDisabled={loading}
           >
-            Registrar
+            {loading ? <Spinner /> : 'Registrar'}
           </Button>
         </form>
       </Main>

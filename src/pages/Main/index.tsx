@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Login from '../../components/templates/Login';
 import Register from '../../components/templates/Register';
+import Success from '../../components/templates/Success';
 import { EState } from './Main.types';
 
 export default function Main() {
@@ -8,7 +9,13 @@ export default function Main() {
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
-  const [state, setState] = useState(EState.Login)
+  const [state, setState] = useState(EState.Login);
+
+  const COMPONENTS = {
+    0: <Login setState={setState} />,
+    1: <Register setState={setState} />,
+    2: <Success setState={setState} />
+  }
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -23,6 +30,6 @@ export default function Main() {
   // --- Data and handlers -----------------------------------------------------  
   // --- END: Data and handlers ------------------------------------------------
   return <>
-    {state === EState.Login ? <Login setState={setState}/> : <Register />}
+    {COMPONENTS[state]}
   </>
 }

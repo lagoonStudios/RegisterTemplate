@@ -8,6 +8,8 @@ import Input from "../../atoms/Input/Input";
 import Main from "../../atoms/Main";
 import { ILogin } from './Login.types';
 import { users } from '../../../constants/users';
+import { useState } from 'react';
+import Spinner from '../../molecules/Spinner';
 
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
@@ -21,14 +23,20 @@ export default function Login({ setState }: ILogin) {
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
+      setLoading(true);
       let compare = users.find((v) => {return v.UserName === values.username && v.Password === values.password});
-      if(compare !== undefined) setTimeout(() => {setState(1)}, 3000);
+      setTimeout(() => {
+        if(compare !== undefined) 
+          setState(1)
+        setLoading(false)
+      }, 2500);
     },
     validationSchema,
   });
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
+  const [loading, setLoading] = useState(false);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -72,8 +80,9 @@ export default function Login({ setState }: ILogin) {
             onClickValue={true}
             customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-lg text-white text-lg"
             type='submit'
+            isDisabled={loading}
           >
-            Ingresar
+            {loading ? <Spinner /> : 'Ingresar'}
           </Button>
         </Div>
       </form>

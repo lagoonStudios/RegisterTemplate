@@ -12,10 +12,14 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
   // serviceId, templateId, templateParams, publicKey
   emailjs
     .send(
-      "service_5cted8p",
+      /* "service_5cted8p",
       "template_ri8cnoo",
       templateParams,
-      "cgmGhlqI_1tJf45Y3"
+      "cgmGhlqI_1tJf45Y3" */
+      "service_upkefmm",
+      "template_4ss2fi3",
+      templateParams,
+      "QjnxgCCvyTuw_xzgr" 
     )
     .then(
       (res) => {
