@@ -10,23 +10,25 @@ import { ILogin } from './Login.types';
 import { users } from '../../../constants/users';
 import { useState } from 'react';
 import Spinner from '../../molecules/Spinner';
+import Span from '../../atoms/Span';
+import { inputClass, inputContainerClass } from './Login.constants';
 
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Required'),
+    username: Yup.string().required('Este Campo es requerido'),
     password: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Este Campo es requerido'),
   })
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
       setLoading(true);
-      let compare = users.find((v) => {return v.UserName === values.username && v.Password === values.password});
+      let compare = users.find((v) => { return v.UserName === values.username && v.Password === values.password });
       setTimeout(() => {
-        if(compare !== undefined) 
+        if (compare !== undefined)
           setState(1)
         setLoading(false)
       }, 2500);
@@ -37,6 +39,7 @@ export default function Login({ setState }: ILogin) {
 
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState(false);
+  const IsError:boolean = Boolean(formik.errors.password) || Boolean(formik.errors.username);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -46,6 +49,7 @@ export default function Login({ setState }: ILogin) {
   // --- END: Redux ------------------------------------------------------------
 
   // --- Side effects ----------------------------------------------------------
+  console.log(formik.errors);
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
@@ -54,7 +58,7 @@ export default function Login({ setState }: ILogin) {
     <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
       <form onSubmit={formik.handleSubmit} className="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center">
         <H1 customClassNames="text-3xl">Inicio de Sesión</H1>
-        <Div customClassNames="flex flex-col w-full px-5 gap-10 justify-center items-center">
+        <Div customClassNames={inputContainerClass(IsError)}>
           <Input
             id='username'
             name="username"
@@ -62,9 +66,10 @@ export default function Login({ setState }: ILogin) {
             value={formik.values.username}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            customClassNames="w-full rounded-xl bg-gray-200 p-2 lg:p-5 text-lg"
+            customClassNames={inputClass(IsError)}
             placeholder="Usuario"
           />
+          {formik?.errors?.username && <Span customClassNames="text-red-600">{formik?.errors?.username}</Span>}
           <Input
             id='password'
             name="password"
@@ -72,13 +77,14 @@ export default function Login({ setState }: ILogin) {
             value={formik.values.password}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            customClassNames="w-full rounded-xl bg-gray-200 p-2 lg:p-5 text-lg"
+            customClassNames={inputClass(IsError)}
             placeholder="Contraseña"
           />
+          {formik?.errors?.password && <Span customClassNames="text-red-600">{formik?.errors?.password}</Span>}
           <Button
             onClick={() => { }}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-lg text-white text-lg"
+            customClassNames="bg-medium-turquoise p-4 mt-3 w-full lg:w-96 rounded-lg text-white text-lg"
             type='submit'
             isDisabled={loading}
           >

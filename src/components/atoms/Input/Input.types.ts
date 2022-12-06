@@ -12,4 +12,5 @@ export type IInput = {
   customClassNames?: Argument[] | Value | Mapping;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  pattern?: string
 };

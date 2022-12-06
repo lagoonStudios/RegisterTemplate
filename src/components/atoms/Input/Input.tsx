@@ -14,7 +14,8 @@ export default function Input({
   onChange,
   max,
   min,
-  placeholder
+  placeholder,
+  pattern
 }: IInput): JSX.Element {
   // --- Hooks -----------------------------------------------------------------
   // --- END: Hooks ------------------------------------------------------------
@@ -42,6 +43,7 @@ export default function Input({
       className={classNames(customClassNames)}
       onChange={onChange}
       placeholder={placeholder}
+      pattern={pattern}
     />
   );
 }

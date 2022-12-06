@@ -34,3 +34,7 @@ export const options = [
   { value: 'alimentos', label: 'Alimentos No Perecederos' },  
   { value: 'otro', label: 'Otro' }
 ]
+
+export const inputClass = (IsError: boolean) => (
+  {"w-full border-b-2 border-black": true, "border-red-600": IsError}
+) 

@@ -1,9 +1,9 @@
 import {
   collection,
   addDoc,
-  query,
+  /* query,
   where,
-  onSnapshot,
+  onSnapshot, */
 } from "firebase/firestore";
 import Select from 'react-select';
 import toastNotify from 'react-hot-toast';
@@ -21,21 +21,37 @@ import Spinner from "../../molecules/Spinner";
 import { firestore } from "../../../config/firebase";
 import { sendEmail } from "./Register.functions";
 import { useState } from "react";
-import { customStyles, options } from "./Register.constants";
+import { customStyles, inputClass, options } from "./Register.constants";
 import { IRegister } from "./Register.types";
 
 export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required"),
-    id: Yup.string().required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
+    name: Yup.string().required("Este Campo es requerido"),
+    id: Yup.number().typeError('Ingresa un documento válido').min(0, 'Ingresa un documento válido').required("Este Campo es requerido"),
+    email: Yup.string().email("Ingresa un correo válido").required("Este Campo es requerido"),
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
     onSubmit: async (values) => {
       setLoading(true);
-      const q = query(collection(firestore, "Registers"), where("id", "==", values.id));
+      await addDoc(collection(firestore, "Registers"), {
+        name: values.name,
+        email: values.email,
+        id: values.id,
+        donative: true,
+        donative_type: donative_type?.value,
+        attendance: false,
+      }).then(() => {
+        setState(2);
+        setLoading(false);
+        toastNotify.success('Datos registrado Exitosamente!');
+        sendEmail(values.name, values.email, values.id);
+      }).catch(() => {
+        setLoading(false);
+        toastNotify.error('Error Registrando Datos');
+      });
+      /* const q = query(collection(firestore, "Registers"), where("id", "==", values.id));
       const unsubscribe = onSnapshot(
         q,
         async (querySnapshot) => {
@@ -48,17 +64,18 @@ export default function Register({ setState }: IRegister) {
               donative_type: donative_type?.value,
               attendance: false,
             }).then(() => {
+              setState(2);
               unsubscribe();
               setLoading(false);
-              setState(2);
               toastNotify.success('Datos registrado Exitosamente!');
               sendEmail(values.name, values.email, values.id);
             }).catch(() => {
-              setLoading(false)
+              setLoading(false);
               toastNotify.error('Error Registrando Datos');
             });
           } else {
-            setLoading(false)
+            unsubscribe();
+            setLoading(false);
             toastNotify.error('Este usuario ya fue registrado');
           };
         },
@@ -66,7 +83,7 @@ export default function Register({ setState }: IRegister) {
           console.log("error: ", err);
           toastNotify.error('Error Registrando Datos');
         }
-      );
+      ); */
     },
     validationSchema,
   });
@@ -75,6 +92,10 @@ export default function Register({ setState }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const [donative_type, setDonative] = useState(options[0]);
   const [loading, setLoading] = useState(false);
+  const IsError = 
+    Boolean(formik.errors.name) || 
+    Boolean(formik.errors.email) || 
+    Boolean(formik.errors.id);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -94,7 +115,7 @@ export default function Register({ setState }: IRegister) {
       <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
         <form
           onSubmit={formik.handleSubmit}
-          className="bg-white w-4/5 lg:w-2/5 h-4/5 p-5 flex flex-col justify-center items-center gap-5"
+          className="bg-white w-4/5 lg:w-2/5 h-5/6 p-5 flex flex-col justify-center items-center gap-5"
         >
           <H1 customClassNames="text-2xl">Formato de Registro</H1>
           <Div customClassNames="flex flex-col flex-1 w-full px-5 gap-5 justify-center">
@@ -106,8 +127,9 @@ export default function Register({ setState }: IRegister) {
               value={formik.values.name}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              customClassNames="w-full border-b-2 border-black"
+              customClassNames={inputClass(IsError)}
             />
+            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.name}</Span>}
             <Span>Correo Electronico</Span>
             <Input
               id="email"
@@ -116,18 +138,24 @@ export default function Register({ setState }: IRegister) {
               value={formik.values.email}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              customClassNames="w-full border-b-2 border-black"
+              customClassNames={inputClass(IsError)}
             />
+            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.email}</Span>}
             <Span>Documento de Identidad</Span>
-            <Input
-              id="id"
-              name="id"
-              type="text"
-              value={formik.values.id}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames="w-full border-b-2 border-black"
-            />
+            <Div customClassNames="flex flex-row gap-2">
+              <Span>V-</Span>
+              <Input
+                id="id"
+                name="id"
+                type="text"
+                pattern="\d*"
+                value={formik.values.id}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                customClassNames={{"w-full border-b-2 border-black": true, "border-red-600": IsError}}
+              />
+            </Div>
+            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.id}</Span>}
             <Span>Tipo de Donativo</Span>
             <Select
               options={options}
