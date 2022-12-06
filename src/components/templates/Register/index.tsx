@@ -115,9 +115,9 @@ export default function Register({ setState }: IRegister) {
       <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
         <form
           onSubmit={formik.handleSubmit}
-          className="bg-white w-4/5 lg:w-2/5 h-5/6 p-5 flex flex-col justify-center items-center gap-5"
+          className="bg-white w-4/5 lg:w-2/5 h-5/6 p-5 flex flex-col justify-center items-center gap-5 rounded-lg"
         >
-          <H1 customClassNames="text-2xl">Formato de Registro</H1>
+          <H1 customClassNames="text-2xl font-bold mt-5">Formato de Registro</H1>
           <Div customClassNames="flex flex-col flex-1 w-full px-5 gap-5 justify-center">
             <Span>Nombre</Span>
             <Input
@@ -152,7 +152,7 @@ export default function Register({ setState }: IRegister) {
                 value={formik.values.id}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                customClassNames={{"w-full border-b-2 border-black": true, "border-red-600": IsError}}
+                customClassNames={inputClass(IsError)}
               />
             </Div>
             {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.id}</Span>}
@@ -167,7 +167,7 @@ export default function Register({ setState }: IRegister) {
           <Button
             onClick={() => { }}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-lg text-white text-lg"
+            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-full text-white text-lg"
             type="submit"
             isDisabled={loading}
           >

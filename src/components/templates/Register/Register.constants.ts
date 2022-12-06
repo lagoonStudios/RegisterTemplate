@@ -36,5 +36,5 @@ export const options = [
 ]
 
 export const inputClass = (IsError: boolean) => (
-  {"w-full border-b-2 border-black": true, "border-red-600": IsError}
+  {"w-full border-b border-black": true, "border-red-600": IsError}
 ) 

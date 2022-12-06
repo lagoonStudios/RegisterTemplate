@@ -55,7 +55,7 @@ export default function Login({ setState }: ILogin) {
   // --- END: Data and handlers ------------------------------------------------
   return <>
     <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
-      <form onSubmit={formik.handleSubmit} className="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center">
+      <form onSubmit={formik.handleSubmit} className="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center rounded-lg">
         <H1 customClassNames="text-3xl">Inicio de Sesión</H1>
         <Div customClassNames={inputContainerClass(IsError)}>
           <Input
@@ -83,7 +83,7 @@ export default function Login({ setState }: ILogin) {
           <Button
             onClick={() => { }}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 mt-3 w-full lg:w-96 rounded-lg text-white text-lg"
+            customClassNames="bg-medium-turquoise p-4 mt-3 w-full lg:w-96 rounded-full text-white text-lg"
             type='submit'
             isDisabled={loading}
           >
