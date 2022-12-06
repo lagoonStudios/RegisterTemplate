@@ -57,7 +57,10 @@ export default function Register({ setState }: IRegister) {
               setLoading(false)
               toastNotify.error('Error Registrando Datos');
             });
-          } else return;
+          } else {
+            setLoading(false)
+            toastNotify.error('Este usuario ya fue registrado');
+          };
         },
         (err) => {
           console.log("error: ", err);
