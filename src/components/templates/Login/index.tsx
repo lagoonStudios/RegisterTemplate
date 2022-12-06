@@ -22,7 +22,7 @@ export default function Login({ setState }: ILogin) {
     initialValues: { username: '', password: '' },
     onSubmit: (values) => {
       let compare = users.find((v) => {return v.UserName === values.username && v.Password === values.password});
-      if(compare != undefined) setTimeout(() => {setState(1)}, 3000);
+      if(compare !== undefined) setTimeout(() => {setState(1)}, 3000);
     },
     validationSchema,
   });
