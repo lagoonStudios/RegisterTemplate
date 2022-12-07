@@ -1,5 +1,4 @@
 import {
-  collection,
   setDoc,
   doc,
   getDoc
@@ -61,59 +60,6 @@ export default function Register({ setState }: IRegister) {
             setLoading(false);
           }
       });
-
-      // await setDoc(doc(firestore, 'Registers', values.id), {
-      //   name: values.name,
-      //   email: values.email,
-      //   id: values.id,
-      //   donative: true,
-      //   donative_type: donative_type?.value,
-      //   attendance: false,
-      // }).then(() => {
-      //   setState(2);
-      //   setLoading(false);
-      //   toastNotify.success('Datos registrado Exitosamente!');
-      //   sendEmail(values.name, values.email, values.id);
-      // }).catch(() => {
-      //   setLoading(false);
-      //   toastNotify.error('Error Registrando Datos');
-      // });
-
-
-
-      /* const q = query(collection(firestore, "Registers"), where("id", "==", values.id));
-      const unsubscribe = onSnapshot(
-        q,
-        async (querySnapshot) => {
-          if (querySnapshot.size === 0) {
-            await addDoc(collection(firestore, "Registers"), {
-              name: values.name,
-              email: values.email,
-              id: values.id,
-              donative: true,
-              donative_type: donative_type?.value,
-              attendance: false,
-            }).then(() => {
-              setState(2);
-              unsubscribe();
-              setLoading(false);
-              toastNotify.success('Datos registrado Exitosamente!');
-              sendEmail(values.name, values.email, values.id);
-            }).catch(() => {
-              setLoading(false);
-              toastNotify.error('Error Registrando Datos');
-            });
-          } else {
-            unsubscribe();
-            setLoading(false);
-            toastNotify.error('Este usuario ya fue registrado');
-          };
-        },
-        (err) => {
-          console.log("error: ", err);
-          toastNotify.error('Error Registrando Datos');
-        }
-      ); */
     },
     validationSchema,
   });
