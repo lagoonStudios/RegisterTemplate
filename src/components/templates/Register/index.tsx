@@ -1,6 +1,8 @@
 import {
   collection,
-  addDoc,
+  setDoc,
+  doc,
+  getDoc
   /* query,
   where,
   onSnapshot, */
@@ -35,22 +37,50 @@ export default function Register({ setState }: IRegister) {
     initialValues: { name: "", email: "", id: "" },
     onSubmit: async (values) => {
       setLoading(true);
-      await addDoc(collection(firestore, "Registers"), {
-        name: values.name,
-        email: values.email,
-        id: values.id,
-        donative: true,
-        donative_type: donative_type?.value,
-        attendance: false,
-      }).then(() => {
-        setState(2);
-        setLoading(false);
-        toastNotify.success('Datos registrado Exitosamente!');
-        sendEmail(values.name, values.email, values.id);
-      }).catch(() => {
-        setLoading(false);
-        toastNotify.error('Error Registrando Datos');
+      getDoc(doc(firestore, 'Registers', values.id)).then(
+        async (res) => {
+        if(res.exists() === false){
+          await setDoc(doc(firestore, 'Registers', values.id), {
+            name: values.name,
+            email: values.email,
+            id: values.id,
+            donative: true,
+            donative_type: donative_type?.value,
+            attendance: false,
+          }).then(() => {
+            setState(2);
+            setLoading(false);
+            toastNotify.success('Datos registrado Exitosamente!');
+            sendEmail(values.name, values.email, values.id);
+          }).catch(() => {
+            setLoading(false);
+            toastNotify.error('Error Registrando Datos');
+          });
+          }else{
+            toastNotify.error('El usuario ya está registrado');
+            setLoading(false);
+          }
       });
+
+      // await setDoc(doc(firestore, 'Registers', values.id), {
+      //   name: values.name,
+      //   email: values.email,
+      //   id: values.id,
+      //   donative: true,
+      //   donative_type: donative_type?.value,
+      //   attendance: false,
+      // }).then(() => {
+      //   setState(2);
+      //   setLoading(false);
+      //   toastNotify.success('Datos registrado Exitosamente!');
+      //   sendEmail(values.name, values.email, values.id);
+      // }).catch(() => {
+      //   setLoading(false);
+      //   toastNotify.error('Error Registrando Datos');
+      // });
+
+
+
       /* const q = query(collection(firestore, "Registers"), where("id", "==", values.id));
       const unsubscribe = onSnapshot(
         q,
