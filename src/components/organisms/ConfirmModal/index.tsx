@@ -5,7 +5,7 @@ import { IConfirmModal } from "./ConfirmModal.types";
 
 export default function ConfirmModal({ data, onSubmit }: IConfirmModal) {
   return <Div customClassNames="z-10 absolute w-full h-full bg-gray-500/70 flex justify-center items-center">
-    <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-3/6 px-4 flex flex-col justify-center items-center gap-3 rounded-lg">
+    <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-3/6 px-4 py-2 flex flex-col justify-center items-center gap-3 rounded-lg overflow-y-scroll">
       <Span customClassNames="font-bold text-xl md:text-2xl mb-3">Confirmación</Span>
       <Span customClassNames="font-base text-base md:text-xl">Documento de Identidad: <strong>{data?.id}</strong></Span>
       <Span customClassNames="font-base text-base md:text-xl">Correo Electronico: <strong>{data?.email}</strong></Span>
