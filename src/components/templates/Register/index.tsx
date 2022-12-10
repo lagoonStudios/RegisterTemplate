@@ -24,6 +24,7 @@ import { sendEmail } from "./Register.functions";
 import { useState } from "react";
 import { customStyles, inputClass, options } from "./Register.constants";
 import { IRegister } from "./Register.types";
+import ConfirmModal from "../../organisms/ConfirmModal";
 
 export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
@@ -34,43 +35,18 @@ export default function Register({ setState }: IRegister) {
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
-    onSubmit: async (values) => {
-      setLoading(true);
-      getDoc(doc(firestore, 'Registers', values.id)).then(
-        async (res) => {
-        if(res.exists() === false){
-          await setDoc(doc(firestore, 'Registers', values.id), {
-            name: values.name,
-            email: values.email,
-            id: values.id,
-            donative: true,
-            donative_type: donative_type?.value,
-            attendance: false,
-          }).then(() => {
-            setState(2);
-            setLoading(false);
-            toastNotify.success('Datos registrado Exitosamente!');
-            sendEmail(values.name, values.email, values.id);
-          }).catch(() => {
-            setLoading(false);
-            toastNotify.error('Error Registrando Datos');
-          });
-          }else{
-            toastNotify.error('El usuario ya está registrado');
-            setLoading(false);
-          }
-      });
-    },
+    onSubmit: async () => setModal(true),
     validationSchema,
   });
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
+  const [isOpenModal, setModal] = useState(false);
   const [donative_type, setDonative] = useState(options[0]);
   const [loading, setLoading] = useState(false);
-  const IsError = 
-    Boolean(formik.errors.name) || 
-    Boolean(formik.errors.email) || 
+  const IsError =
+    Boolean(formik.errors.name) ||
+    Boolean(formik.errors.email) ||
     Boolean(formik.errors.id);
   // --- END: Local state ------------------------------------------------------
 
@@ -85,9 +61,39 @@ export default function Register({ setState }: IRegister) {
 
   // --- Data and handlers -----------------------------------------------------
   const handler = (e: any) => setDonative(e);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = () => {
+    setModal(false);
+    setLoading(true);
+    getDoc(doc(firestore, 'Registers', formik.values.id)).then(
+      async (res) => {
+        if (res.exists() === false) {
+          await setDoc(doc(firestore, 'Registers', formik.values.id), {
+            name: formik.values.name,
+            email: formik.values.email,
+            id: formik.values.id,
+            donative: true,
+            donative_type: donative_type?.value,
+            attendance: false,
+          }).then(() => {
+            setState(2);
+            setLoading(false);
+            toastNotify.success('Datos registrado Exitosamente!');
+            sendEmail(formik.values.name, formik.values.email, formik.values.id);
+          }).catch(() => {
+            setLoading(false);
+            toastNotify.error('Error Registrando Datos');
+          });
+        } else {
+          toastNotify.error('El usuario ya está registrado');
+          setLoading(false);
+        }
+      });
+  };
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
+      {isOpenModal && <ConfirmModal onSubmit={onSubmit} data={{ email: formik.values.email, id: formik.values.id }} />}
       <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
         <form
           onSubmit={formik.handleSubmit}

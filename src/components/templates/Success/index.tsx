@@ -25,12 +25,12 @@ export default function Login({ setState }: ISuccess) {
   return <>
     <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
       <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center rounded-lg">
-        <H1 customClassNames="text-3xl">Datos Registrados Exitosamente</H1>
+        <H1 customClassNames="text-xl md:text-3xl">Datos Registrados Exitosamente</H1>
         <Div customClassNames="flex flex-col w-full px-5 gap-10 justify-center items-center">
           <Button
             onClick={() => setState(1)}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-full text-white text-lg"
+            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-full text-white text-base md:text-lg"
             type='submit'
           >
             Volver al Formulario
