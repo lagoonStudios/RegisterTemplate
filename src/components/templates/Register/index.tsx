@@ -61,7 +61,7 @@ export default function Register({ setState }: IRegister) {
 
   // --- Data and handlers -----------------------------------------------------
   const handler = (e: any) => setDonative(e);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const onSubmit = () => {
     setModal(false);
     setLoading(true);
@@ -90,10 +90,15 @@ export default function Register({ setState }: IRegister) {
         }
       });
   };
+
+  const onCancel = () => {
+    setModal(false);
+    setLoading(false);
+  };
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
-      {isOpenModal && <ConfirmModal onSubmit={onSubmit} data={{ email: formik.values.email, id: formik.values.id }} />}
+      {isOpenModal && <ConfirmModal onCancel={onCancel} onSubmit={onSubmit} data={{ email: formik.values.email, id: formik.values.id }} />}
       <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
         <form
           onSubmit={formik.handleSubmit}
