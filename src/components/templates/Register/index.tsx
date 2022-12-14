@@ -31,7 +31,7 @@ export default function Register({ setState }: IRegister) {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Este Campo es requerido"),
     id: Yup.number().typeError('Ingresa un documento válido').min(0, 'Ingresa un documento válido').required("Este Campo es requerido"),
-    email: Yup.string().email("Ingresa un correo válido").required("Este Campo es requerido"),
+    email: Yup.string().trim().email("Ingresa un correo válido").required("Este Campo es requerido"),
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
@@ -70,7 +70,7 @@ export default function Register({ setState }: IRegister) {
         if (res.exists() === false) {
           await setDoc(doc(firestore, 'Registers', formik.values.id), {
             name: formik.values.name,
-            email: formik.values.email,
+            email: formik.values.email.trim(),
             id: formik.values.id,
             donative: true,
             donative_type: donative_type?.value,
