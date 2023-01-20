@@ -1,10 +1,9 @@
 import {
   setDoc,
   doc,
-  getDoc
-  /* query,
-  where,
-  onSnapshot, */
+  getDoc,
+  /* getDocs,
+  collection */
 } from "firebase/firestore";
 import Select from 'react-select';
 import toastNotify from 'react-hot-toast';
@@ -21,7 +20,7 @@ import Spinner from "../../molecules/Spinner";
 
 import { firestore } from "../../../config/firebase";
 import { sendEmail } from "./Register.functions";
-import { useState } from "react";
+import {/*  useCallback, useEffect, */ useState } from "react";
 import { customStyles, inputClass, options } from "./Register.constants";
 import { IRegister } from "./Register.types";
 import ConfirmModal from "../../organisms/ConfirmModal";
@@ -41,6 +40,7 @@ export default function Register({ setState }: IRegister) {
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
+  /* const [isSuccessRegisters, setSuccess] = useState<boolean>(false); */
   const [isOpenModal, setModal] = useState(false);
   const [donative_type, setDonative] = useState(options[0]);
   const [loading, setLoading] = useState(false);
@@ -57,6 +57,32 @@ export default function Register({ setState }: IRegister) {
   // --- END: Redux ------------------------------------------------------------
 
   // --- Side effects ----------------------------------------------------------
+
+  /* const getData = useCallback(async () => {
+    const docs:any[] = [];
+    const querySnapshot = await getDocs(collection(firestore, "Registers"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      docs.push({
+        email: doc.get('email'),
+        donativo: doc.get('donative'),
+        tipo_donativo: doc.get('donative_type'),
+        asistencia: doc.get('attendance'),
+        cedula: doc.get('id'),
+        nombre: doc.get('name'),
+      });
+    });
+    
+    console.log(docs);
+       
+  }, []); */
+
+  /* useEffect(() => {
+    if(!isSuccessRegisters) {
+      getData(); 
+      setSuccess(true); 
+    } 
+  }, [getData, isSuccessRegisters]); */
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
