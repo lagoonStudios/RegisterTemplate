@@ -1,11 +1,8 @@
 import {
   setDoc,
   doc,
-  getDoc,
-  /* getDocs,
-  collection */
+  getDoc
 } from "firebase/firestore";
-import Select from 'react-select';
 import toastNotify from 'react-hot-toast';
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -20,8 +17,8 @@ import Spinner from "../../molecules/Spinner";
 
 import { firestore } from "../../../config/firebase";
 import { sendEmail } from "./Register.functions";
-import {/*  useCallback, useEffect, */ useState } from "react";
-import { customStyles, inputClass, options } from "./Register.constants";
+import { useState } from "react";
+import { inputClass } from "./Register.constants";
 import { IRegister } from "./Register.types";
 import ConfirmModal from "../../organisms/ConfirmModal";
 
@@ -40,14 +37,11 @@ export default function Register({ setState }: IRegister) {
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
-  /* const [isSuccessRegisters, setSuccess] = useState<boolean>(false); */
   const [isOpenModal, setModal] = useState(false);
-  const [donative_type, setDonative] = useState(options[0]);
   const [loading, setLoading] = useState(false);
-  const IsError =
-    Boolean(formik.errors.name) ||
-    Boolean(formik.errors.email) ||
-    Boolean(formik.errors.id);
+  const IsNameError = Boolean(formik.errors.name);
+  const IsEmailError = Boolean(formik.errors.email);
+  const IsIdError = Boolean(formik.errors.id);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -57,36 +51,9 @@ export default function Register({ setState }: IRegister) {
   // --- END: Redux ------------------------------------------------------------
 
   // --- Side effects ----------------------------------------------------------
-
-  /* const getData = useCallback(async () => {
-    const docs:any[] = [];
-    const querySnapshot = await getDocs(collection(firestore, "Registers"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      docs.push({
-        email: doc.get('email'),
-        donativo: doc.get('donative'),
-        tipo_donativo: doc.get('donative_type'),
-        asistencia: doc.get('attendance'),
-        cedula: doc.get('id'),
-        nombre: doc.get('name'),
-      });
-    });
-    
-    console.log(docs);
-       
-  }, []); */
-
-  /* useEffect(() => {
-    if(!isSuccessRegisters) {
-      getData(); 
-      setSuccess(true); 
-    } 
-  }, [getData, isSuccessRegisters]); */
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-  const handler = (e: any) => setDonative(e);
 
   const onSubmit = () => {
     setModal(false);
@@ -99,7 +66,6 @@ export default function Register({ setState }: IRegister) {
             email: formik.values.email.trim(),
             id: formik.values.id,
             donative: true,
-            donative_type: donative_type?.value,
             attendance: false,
           }).then(() => {
             setState(2);
@@ -125,68 +91,70 @@ export default function Register({ setState }: IRegister) {
   return (
     <>
       {isOpenModal && <ConfirmModal onCancel={onCancel} onSubmit={onSubmit} data={{ email: formik.values.email, id: formik.values.id }} />}
-      <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
-        <form
-          onSubmit={formik.handleSubmit}
-          className="bg-white w-4/5 lg:w-2/5 h-5/6 p-5 flex flex-col justify-center items-center gap-5 rounded-lg overflow-y-scroll"
-        >
-          <H1 customClassNames="text-2xl font-bold mt-5">Formato de Registro</H1>
-          <Div customClassNames="flex flex-col flex-1 w-full px-5 gap-5 justify-center">
-            <Span>Nombre</Span>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              value={formik.values.name}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames={inputClass(IsError)}
-            />
-            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.name}</Span>}
-            <Span>Correo Electronico</Span>
-            <Input
-              id="email"
-              name="email"
-              type="text"
-              value={formik.values.email}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames={inputClass(IsError)}
-            />
-            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.email}</Span>}
-            <Span>Documento de Identidad</Span>
-            <Div customClassNames="flex flex-row gap-2">
-              <Span>V-</Span>
-              <Input
-                id="id"
-                name="id"
-                type="text"
-                pattern="\d*"
-                value={formik.values.id}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                customClassNames={inputClass(IsError)}
-              />
-            </Div>
-            {formik.errors.name && <Span customClassNames="text-red-600">{formik.errors.id}</Span>}
-            <Span>Tipo de Donativo</Span>
-            <Select
-              options={options}
-              styles={customStyles}
-              onChange={(e) => handler(e)}
-              defaultValue={options[0]}
-            />
-          </Div>
-          <Button
-            onClick={() => { }}
-            onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-full text-white text-lg"
-            type="submit"
-            isDisabled={loading}
+      <Main customClassNames="bg-mint-cream h-screen flex flex-1 justify-center items-center">
+        <Div customClassNames="flex flex-col lg:grid lg:grid-cols-5 h-5/6 w-4/5">
+          <Div customClassNames="bg-register bg-cover bg-no-repeat lg:col-span-2 flex flex-1 xs:max-lg:rounded-t-lg lg:rounded-l-lg" />
+          <form
+            onSubmit={formik.handleSubmit}
+            className="bg-white lg:col-span-3 p-5 flex flex-col justify-center items-center gap-8 xs:max-lg:rounded-b-lg lg:rounded-r-lg overflow-y-scroll"
           >
-            {loading ? <Spinner /> : 'Registrar'}
-          </Button>
-        </form>
+            <H1 customClassNames="text-2xl font-bold mt-5">Formato de Registro</H1>
+            <Div customClassNames="flex flex-col w-full px-5 gap-9 justify-center">
+              <Div customClassNames="flex flex-col gap-1">
+                <Span>Nombre Completo</Span>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formik.values.name}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  customClassNames={inputClass(IsNameError)}
+                />
+                {formik.touched.name && IsNameError && <Span customClassNames="text-red-600">{formik.errors.name}</Span>}
+              </Div>
+              <Div customClassNames="flex flex-col gap-1">
+                <Span>Documento de Identidad</Span>
+                <Div customClassNames="flex flex-row gap-2">
+                  <Span>V-</Span>
+                  <Input
+                    id="id"
+                    name="id"
+                    type="text"
+                    pattern="\d*"
+                    value={formik.values.id}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    customClassNames={inputClass(IsIdError)}
+                  />
+                </Div>
+                {formik.touched.id && IsIdError && <Span customClassNames="text-red-600">{formik.errors.id}</Span>}
+              </Div>
+              <Div customClassNames="flex flex-col gap-1">
+                <Span>Correo Electronico</Span>
+                <Input
+                  id="email"
+                  name="email"
+                  type="text"
+                  value={formik.values.email}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  customClassNames={inputClass(IsEmailError)}
+                />
+                {formik.touched.email && IsEmailError && <Span customClassNames="text-red-600">{formik.errors.email}</Span>}
+              </Div>
+            </Div>
+            <Button
+              onClick={() => { }}
+              onClickValue={true}
+              customClassNames="bg-mint py-4 w-11/12 rounded-lg text-white text-lg"
+              type="submit"
+              isDisabled={loading}
+            >
+              {loading ? <Spinner /> : 'Completar Registro'}
+            </Button>
+          </form>
+        </Div>
       </Main>
     </>
   );

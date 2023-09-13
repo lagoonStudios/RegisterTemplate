@@ -30,7 +30,7 @@ export default function Login({ setState }: ISuccess) {
           <Button
             onClick={() => setState(1)}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 w-full lg:w-96 rounded-full text-white text-base md:text-lg"
+            customClassNames="bg-mint p-4 w-full lg:w-96 rounded-full text-white text-base md:text-lg"
             type='submit'
           >
             Volver al Formulario

@@ -4,7 +4,7 @@ const inputContainerClass = (IsError: boolean) => ({
 })
 
 const inputClass = (IsError: boolean) => ({
-  "w-full rounded-xl bg-gray-200 p-2 lg:p-5 text-lg": true, 
+  "w-full rounded-xl bg-gray-200 p-2 lg:p-5 text-lg outline-none focus:border-mint focus:border focus:border-mint": true, 
   "border border-red-600": IsError
 })
 

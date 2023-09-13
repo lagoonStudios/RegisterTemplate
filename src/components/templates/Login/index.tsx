@@ -39,7 +39,8 @@ export default function Login({ setState }: ILogin) {
 
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState(false);
-  const IsError:boolean = Boolean(formik.errors.password) || Boolean(formik.errors.username);
+  const IsPassawordError:boolean = Boolean(formik.errors.password);
+  const IsUsernameError:boolean = Boolean(formik.errors.username);
   // --- END: Local state ------------------------------------------------------
 
   // --- Refs ------------------------------------------------------------------
@@ -54,10 +55,10 @@ export default function Login({ setState }: ILogin) {
   // --- Data and handlers -----------------------------------------------------
   // --- END: Data and handlers ------------------------------------------------
   return <>
-    <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
+    <Main customClassNames="bg-mint-cream h-screen flex flex-1 justify-center items-center">
       <form onSubmit={formik.handleSubmit} className="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-5 md:gap-10 justify-center rounded-lg overflow-y-scroll">
         <H1 customClassNames="text-3xl">Inicio de Sesión</H1>
-        <Div customClassNames={inputContainerClass(IsError)}>
+        <Div customClassNames={inputContainerClass(IsUsernameError || IsPassawordError)}>
           <Input
             id='username'
             name="username"
@@ -65,10 +66,10 @@ export default function Login({ setState }: ILogin) {
             value={formik.values.username}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            customClassNames={inputClass(IsError)}
+            customClassNames={inputClass(IsUsernameError)}
             placeholder="Usuario"
           />
-          {formik?.errors?.username && <Span customClassNames="text-red-600">{formik?.errors?.username}</Span>}
+          {IsUsernameError && <Span customClassNames="text-red-600">{formik?.errors?.username}</Span>}
           <Input
             id='password'
             name="password"
@@ -76,14 +77,14 @@ export default function Login({ setState }: ILogin) {
             value={formik.values.password}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            customClassNames={inputClass(IsError)}
+            customClassNames={inputClass(IsPassawordError)}
             placeholder="Contraseña"
           />
-          {formik?.errors?.password && <Span customClassNames="text-red-600">{formik?.errors?.password}</Span>}
+          {IsPassawordError && <Span customClassNames="text-red-600">{formik?.errors?.password}</Span>}
           <Button
             onClick={() => { }}
             onClickValue={true}
-            customClassNames="bg-medium-turquoise p-4 mt-3 w-full lg:w-96 rounded-full text-white text-lg"
+            customClassNames="bg-mint p-4 mt-3 w-full lg:w-96 rounded-full text-white text-lg"
             type='submit'
             isDisabled={loading}
           >
