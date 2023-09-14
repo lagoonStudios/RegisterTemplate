@@ -96,7 +96,7 @@ export default function Register({ setState }: IRegister) {
           <Div customClassNames="bg-register bg-cover bg-no-repeat lg:col-span-2 flex flex-1 xs:max-lg:rounded-t-lg lg:rounded-l-lg" />
           <form
             onSubmit={formik.handleSubmit}
-            className="bg-white lg:col-span-3 p-5 flex flex-col justify-center items-center gap-8 xs:max-lg:rounded-b-lg lg:rounded-r-lg overflow-y-scroll"
+            className="bg-white lg:col-span-3 p-5 flex flex-col justify-center items-center gap-8 xs:max-lg:rounded-b-lg lg:rounded-r-lg"
           >
             <H1 customClassNames="text-2xl font-bold mt-5">Formato de Registro</H1>
             <Div customClassNames="flex flex-col w-full px-5 gap-9 justify-center">
