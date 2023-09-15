@@ -24,7 +24,7 @@ export default function Login({ setState }: ISuccess) {
   // --- END: Data and handlers ------------------------------------------------
   return <>
     <Main customClassNames="bg-desktop h-screen flex flex-1 justify-center items-center">
-      <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center rounded-lg overflow-y-scroll">
+      <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-10 justify-center rounded-lg">
         <H1 customClassNames="text-center text-xl md:text-3xl">Datos Registrados Exitosamente</H1>
         <Div customClassNames="flex flex-col w-full px-5 gap-10 justify-center items-center">
           <Button

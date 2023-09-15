@@ -25,9 +25,18 @@ import ConfirmModal from "../../organisms/ConfirmModal";
 export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Este Campo es requerido"),
-    id: Yup.number().typeError('Ingresa un documento válido').min(0, 'Ingresa un documento válido').required("Este Campo es requerido"),
-    email: Yup.string().trim().email("Ingresa un correo válido").required("Este Campo es requerido"),
+    name: Yup.string()
+              .required("Este Campo es requerido")
+              .max(64, 'Maximo 64 caracteres'),
+    id: Yup.number()
+              .typeError('Ingresa un documento válido')
+              .min(0, 'Ingresa un documento válido')
+              .required("Este Campo es requerido")
+              .test('len', 'Maximo 64 caracteres', val => String(val)?.length < 64),
+    email: Yup.string()
+              .trim().email("Ingresa un correo válido")
+              .required("Este Campo es requerido")
+              .max(64, 'Maximo 64 caracteres'),
   });
   const formik = useFormik({
     initialValues: { name: "", email: "", id: "" },
@@ -121,7 +130,6 @@ export default function Register({ setState }: IRegister) {
                     id="id"
                     name="id"
                     type="text"
-                    pattern="\d*"
                     value={formik.values.id}
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
