@@ -16,10 +16,10 @@ export default function ConfirmModal({ data, onSubmit, onCancel }: IConfirmModal
           X
         </Button>
       </Div>
-      <Div customClassNames="flex flex-col h-72 md:h-96 gap-5 justify-center items-center text-center px-10">
+      <Div customClassNames="flex flex-col h-80 md:h-96 gap-5 justify-center items-center text-center px-10 w-full ">
         <Span customClassNames="font-bold text-xl md:text-2xl mb-3">Confirmación</Span>
-        <Span customClassNames="font-base text-base md:text-xl">Documento de Identidad: <strong>V-{data?.id}</strong></Span>
-        <Span customClassNames="font-base text-base md:text-xl">Correo Electronico: <strong>{data?.email}</strong></Span>
+        <Span customClassNames="font-base text-base md:text-xl break-all flex flex-col">Documento de Identidad: <strong>V-{data?.id}</strong></Span>
+        <Span customClassNames="font-base text-base md:text-xl break-all flex flex-col">Correo Electronico: <strong>{data?.email}</strong></Span>
         <Button
           onClick={() => onSubmit()}
           onClickValue={true}

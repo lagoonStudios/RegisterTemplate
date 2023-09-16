@@ -32,7 +32,7 @@ export default function Register({ setState }: IRegister) {
               .typeError('Ingresa un documento válido')
               .min(0, 'Ingresa un documento válido')
               .required("Este Campo es requerido")
-              .test('len', 'Maximo 64 caracteres', val => String(val)?.length < 64),
+              .test('len', 'Maximo 12 caracteres', val => String(val)?.length < 12),
     email: Yup.string()
               .trim().email("Ingresa un correo válido")
               .required("Este Campo es requerido")
