@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const MainScreen = lazy(() => import('./pages/Main/index'));
 /**
- * @returns {JSX.Element} The main Application
+ * @returns {React.ReactNode} The main Application
  */
-function App(): JSX.Element {
+function App(): React.ReactNode {
   return (
     <Router>
       <React.Suspense >
