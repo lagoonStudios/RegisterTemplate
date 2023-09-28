@@ -36,6 +36,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "deploy": "tsc && vite build && firebase deploy",
     "lint": "eslint . --max-warnings 0"
   },
   "eslintConfig": {
