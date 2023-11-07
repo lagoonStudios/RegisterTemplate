@@ -62,13 +62,12 @@ export default function Register({ setState }: IRegister) {
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-
   const onSubmit = () => {
     setModal(false);
-    setLoading(true);    
-    getDoc(doc(firestore, "Registers", formik.values.id)).then(
-      async (res) => {
-        if (res.exists() === false) {
+    setLoading(true);
+    getDoc(doc(firestore, "Tickets", formik.values.id))
+      .then(async (res) => {
+        if (!res.exists())
           await setDoc(doc(firestore, "Tickets", formik.values.id), {
             name: formik.values.name,
             email: formik.values.email.trim(),
@@ -86,17 +85,16 @@ export default function Register({ setState }: IRegister) {
               setLoading(false);
               toastNotify.error("Error Registrando Datos");
             });
-        } else {
+        else {
           toastNotify.error("El usuario ya está registrado");
           setLoading(false);
         }
-      },
-      (error) => {
-        toastNotify.error("Algo salió mal");
+      })
+      .catch(({ message }) => {
+        const errorMessage = String(message);
+        toastNotify.error(`Error: ${errorMessage}`);
         setLoading(false);
-        throw new Error(error)
-      }
-    );
+      });
   };
 
   const onCancel = () => {
