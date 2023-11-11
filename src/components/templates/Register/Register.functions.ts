@@ -4,11 +4,8 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
   const templateParams = {
     to_name,
     to_email,
-    qr:
-      "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" +
-      id,
+    qr: "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + id,
   };
-  console.log('template: ', templateParams);
   // serviceId, templateId, templateParams, publicKey
   emailjs
     .send(
@@ -19,7 +16,7 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
       /* "service_upkefmm",
       "template_4ss2fi3",
       templateParams,
-      "QjnxgCCvyTuw_xzgr" */ 
+      "QjnxgCCvyTuw_xzgr" */
     )
     .then(
       (res) => {

@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-qr-code": "^2.0.8",
+    "react-query": "^3.39.3",
     "react-router": "^6.4.4",
     "react-router-dom": "^6.4.4",
     "react-select": "^5.7.0",
@@ -35,6 +36,7 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
+    "preview":"vite preview",
     "serve": "vite preview",
     "deploy": "tsc && vite build && firebase deploy",
     "lint": "eslint . --max-warnings 0"

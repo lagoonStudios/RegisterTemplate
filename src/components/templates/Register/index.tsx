@@ -1,22 +1,24 @@
-import { setDoc, doc, getDoc } from "firebase/firestore";
-import toastNotify from "react-hot-toast";
-import { useFormik } from "formik";
 import * as Yup from "yup";
-
-import Button from "../../atoms/Button";
-import Div from "../../atoms/Div";
-import H1 from "../../atoms/H1";
-import Input from "../../atoms/Input/Input";
-import Main from "../../atoms/Main";
-import Span from "../../atoms/Span";
-import Spinner from "../../molecules/Spinner";
-
-import { firestore } from "../../../config/firebase";
-import { sendEmail } from "./Register.functions";
 import { useState } from "react";
-import { inputClass } from "./Register.constants";
+import { useFormik } from "formik";
+import toastNotify from "react-hot-toast";
+import { setDoc, doc, getDoc } from "firebase/firestore";
+
+import { firestore } from "@/config/firebase";
+
+import H1 from "@/components/atoms/H1";
+import Div from "@/components/atoms/Div";
+import Main from "@/components/atoms/Main";
+import Span from "@/components/atoms/Span";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input/Input";
+import Spinner from "@/components/molecules/Spinner";
+import ConfirmModal from "@/components/organisms/ConfirmModal";
+
 import { IRegister } from "./Register.types";
-import ConfirmModal from "../../organisms/ConfirmModal";
+import { sendEmail } from "./Register.functions";
+import { inputClass } from "./Register.constants";
+import { logOut } from "@/hooks/auth";
 
 export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
@@ -97,6 +99,11 @@ export default function Register({ setState }: IRegister) {
     setModal(false);
     setLoading(false);
   };
+
+  const onLogout = () => {
+    setState(0);
+    logOut();
+  };
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -108,6 +115,9 @@ export default function Register({ setState }: IRegister) {
         />
       )}
       <Main customClassNames="bg-mint-cream h-screen flex flex-1 justify-center items-center">
+        <Button onClick={onLogout} onClickValue="" customClassNames="absolute top-1 right-3">
+          Logout
+        </Button>
         <Div customClassNames="flex flex-col lg:grid lg:grid-cols-5 h-5/6 w-4/5">
           <Div customClassNames="bg-register bg-cover bg-no-repeat lg:col-span-2 flex flex-1 xs:max-lg:rounded-t-lg lg:rounded-l-lg" />
           <form
