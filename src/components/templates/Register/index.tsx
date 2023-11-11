@@ -18,11 +18,10 @@ import ConfirmModal from "@/components/organisms/ConfirmModal";
 import { IRegister } from "./Register.types";
 import { sendEmail } from "./Register.functions";
 import { inputClass } from "./Register.constants";
-import { logOut, useAuthentication } from "@/hooks/auth";
+import { logOut } from "@/hooks/auth";
 
 export default function Register({ setState }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
-  const user = useAuthentication();
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Este Campo es requerido").max(64, "Maximo 64 caracteres"),
     id: Yup.number()
@@ -37,7 +36,6 @@ export default function Register({ setState }: IRegister) {
       .max(64, "Maximo 64 caracteres"),
   });
   const formik = useFormik({
-    
     initialValues: { name: "", email: "", id: "" },
     onSubmit: async () => setModal(true),
     validationSchema,

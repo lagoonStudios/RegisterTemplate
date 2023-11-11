@@ -1,18 +1,20 @@
-import { useFormik } from "formik";
 import * as Yup from "yup";
-
-import Button from "@/components/atoms/Button";
-import Div from "@/components/atoms/Div";
-import H1 from "@/components/atoms/H1";
-import Input from "@/components/atoms/Input/Input";
-import Main from "@/components/atoms/Main";
-import { ILogin } from "./Login.types";
-import { users } from "@/constants/users";
 import { useState } from "react";
-import Spinner from "@/components/molecules/Spinner";
-import Span from "@/components/atoms/Span";
-import { inputClass, inputContainerClass } from "./Login.constants";
+import { useFormik } from "formik";
+
 import { logIn } from "@/hooks/auth";
+
+import { ILogin } from "./Login.types";
+import { inputClass, inputContainerClass } from "./Login.constants";
+
+import H1 from "@/components/atoms/H1";
+import Div from "@/components/atoms/Div";
+import Span from "@/components/atoms/Span";
+import Main from "@/components/atoms/Main";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input/Input";
+import Spinner from "@/components/molecules/Spinner";
+
 
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
