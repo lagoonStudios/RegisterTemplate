@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Login from "../../components/templates/Login";
 import Register from "../../components/templates/Register";
 import Success from "../../components/templates/Success";
@@ -7,7 +7,7 @@ import { useAuthentication } from "@/hooks/auth";
 
 export default function Main() {
   // --- Hooks -----------------------------------------------------------------
-  const user = useAuthentication();
+  const { user } = useAuthentication();
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
@@ -15,21 +15,20 @@ export default function Main() {
 
   const COMPONENTS = {
     0: <Login setState={setState} />,
-    1: user ? <Register setState={setState} /> : <Login setState={setState} />,
+    1: <Register setState={setState} />,
     2: <Success setState={setState} />,
   };
   // --- END: Local state ------------------------------------------------------
 
-  // --- Refs ------------------------------------------------------------------
-  // --- END: Refs -------------------------------------------------------------
-
-  // --- Redux -----------------------------------------------------------------
-  // --- END: Redux ------------------------------------------------------------
-
-  // --- Side effects ----------------------------------------------------------
-  // --- END: Side effects -----------------------------------------------------
-
   // --- Data and handlers -----------------------------------------------------
+  const component = useMemo(() => {
+    if (user && state !== EState.Success) return COMPONENTS[EState.Register]
+
+    else if(user === undefined) return COMPONENTS[EState.Login]
+
+    return COMPONENTS[state]
+  }, [user, state])
   // --- END: Data and handlers ------------------------------------------------
-  return <>{COMPONENTS[state]}</>;
+
+  return <>{component}</>;
 }

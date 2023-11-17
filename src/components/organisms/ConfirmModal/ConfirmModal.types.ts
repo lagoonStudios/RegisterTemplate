@@ -4,5 +4,10 @@ export interface IConfirmModal {
   data: {
     email: string,
     id: string,
+    name: string,
+    phoneNumber: string,
+    paymentType: string,
+    ticketType: string,
+    reference: string,
   }
 }

@@ -1,12 +1,12 @@
-import Button from "../../atoms/Button";
-import Div from "../../atoms/Div";
-import Span from "../../atoms/Span";
+import Button from "@/components/atoms/Button";
+import Div from "@/components/atoms/Div";
+import Span from "@/components/atoms/Span";
 import { IConfirmModal } from "./ConfirmModal.types";
 
 export default function ConfirmModal({ data, onSubmit, onCancel }: IConfirmModal) {
-  return <Div customClassNames="z-10 absolute w-full h-full bg-gray-500/70 flex justify-center items-center">
-    <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-1/2 lg:h-3/6 p-4 lg:py-2 flex flex-col justify-center items-center rounded-lg">
-      <Div customClassNames="flex w-full flex-1 justify-end relative">
+  return <Div customClassNames="z-10 fixed w-full h-full bg-gray-500/70 flex justify-center items-center">
+    <Div customClassNames="bg-white w-4/5 lg:w-2/5 h-1/2 lg:h-4/6 p-4 lg:py-2 flex flex-col justify-center items-center rounded-lg">
+      <Div customClassNames="flex w-full justify-end">
         <Button
           onClick={() => onCancel()}
           onClickValue={true}
@@ -16,14 +16,21 @@ export default function ConfirmModal({ data, onSubmit, onCancel }: IConfirmModal
           X
         </Button>
       </Div>
-      <Div customClassNames="flex flex-col h-80 md:h-96 gap-5 justify-center items-center text-center px-10 w-full ">
-        <Span customClassNames="font-bold text-xl md:text-2xl mb-3">Confirmación</Span>
-        <Span customClassNames="font-base text-base md:text-xl break-all flex flex-col">Documento de Identidad: <strong>V-{data?.id}</strong></Span>
-        <Span customClassNames="font-base text-base md:text-xl break-all flex flex-col">Correo Electronico: <strong>{data?.email}</strong></Span>
+      <Div customClassNames="flex flex-col h-80 md:h-96 gap-5 justify-center items-center text-center px-3 w-full flex-1">
+        <Span customClassNames="font-bold text-xl md:text-2xl mb-2">Confirmación</Span>
+        <Div customClassNames="grid grid-cols-2 gap-5 overflow-y-scroll justify-center items-center">
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Nombre: <strong>{data?.name}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Documento de Identidad: <strong>V-{data?.id}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Correo Electronico: <strong>{data?.email}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Numero de Telefono: <strong>{data?.phoneNumber}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Tipo de Entrada: <strong>{data?.ticketType}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Tipo de Pago: <strong>{data?.paymentType}</strong></Span>
+          <Span customClassNames="font-base text-base md:text-md break-all flex flex-col">Referencia: <strong>{data?.reference}</strong></Span>
+        </Div>
         <Button
           onClick={() => onSubmit()}
           onClickValue={true}
-          customClassNames="bg-mint p-4 w-full lg:w-52 rounded-lg text-white text-lg"
+          customClassNames="bg-yellow p-2 lg:p-3 mt-3 w-5/12 lg:w-96 rounded-xl text-black text-lg font-bold shadow-submitButton"
           type="button"
         >
           Aceptar
