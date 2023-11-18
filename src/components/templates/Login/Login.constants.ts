@@ -1,5 +1,5 @@
 const inputContainerClass = (IsError: boolean) => ({
-  "flex flex-col w-full px-5 gap-5 justify-center items-center": true,
+  "flex flex-col w-full px-5 gap-5 justify-center items-center text-base lg:text-xl": true,
   "gap-2": IsError
 })
 

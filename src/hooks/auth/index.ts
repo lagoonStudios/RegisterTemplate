@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { collection, query, getDocs, DocumentData } from "firebase/firestore";
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "@/config/firebase";
+import { auth, firestore } from "@/config/firebase";
 
 /**
  * Custom hook for managing user authentication using Firebase Auth.
@@ -70,4 +71,60 @@ export function useAuthErrorMessage(message: string): string {
   const mappedMessage = Object.keys(errorMessageMap).find((key) => message.includes(key));
 
   return mappedMessage ? errorMessageMap[mappedMessage] : defaultMessage;
+}
+
+/**
+ * Returns an array of payment types 
+ * @returns array
+ */
+export function usePaymentTypes() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "PaymentTypes"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () => (await getDocs(q)).docs.forEach((doc) => setData((prev) => {
+      const isExist = prev.some((element) => element?.id === doc.id)
+
+      return isExist ? [...prev] : [...prev, {...doc.data(), id: doc.id}]
+    }));
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
+}
+
+/**
+ * Returns an array of ticket types 
+ * @returns array
+ */
+export function useTicketTypes() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "TicketTypes"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () => (await getDocs(q)).docs.forEach((doc) => setData((prev) => {
+      const isExist = prev.some((element) => element?.id === doc.id)
+
+      return isExist ? [...prev] : [...prev, {...doc.data(), id: doc.id}]
+    }));
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
 }

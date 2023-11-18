@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFormik } from "formik";
 
 import Div from "@/components/atoms/Div";
@@ -16,9 +16,10 @@ import { submitHandler } from "./Register.functions";
 import { logOut, useAuthentication } from "@/hooks/auth";
 import { formatValues, initialValues } from "./Register.constants";
 
-export default function Register({ setState }: IRegister) {
+export default function Register({ setState, paymentTypes, ticketTypes }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
   const { user } = useAuthentication();
+
   const validationSchema = Yup.object().shape(formatValues);
   const formik = useFormik({
     initialValues,
@@ -46,6 +47,10 @@ export default function Register({ setState }: IRegister) {
     setState(0);
     logOut();
   };
+
+  const paymentType = useMemo(() => paymentTypes?.find(({ id }) => id === formik.values.paymentType), [formik]);
+  const ticketType = useMemo(() => ticketTypes?.find(({ id }) => id === formik.values.ticketType), [formik]);
+
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -57,10 +62,10 @@ export default function Register({ setState }: IRegister) {
             email: formik.values.email,
             id: formik.values.id,
             name: formik.values.name,
-            paymentType: formik.values.paymentType,
             phoneNumber: formik.values.phoneNumber,
+            paymentType: paymentType?.label,
+            ticketType: ticketType?.label,
             reference: formik.values.reference,
-            ticketType: formik.values.ticketType,
           }}
         />
       )}
@@ -80,7 +85,7 @@ export default function Register({ setState }: IRegister) {
           onSubmit={formik.handleSubmit}
           className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
         >
-          <PersonalForm formik={formik} loading={loading} />
+          <PersonalForm formik={formik} loading={loading} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />
         </form>
       </Main>
     </>

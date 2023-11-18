@@ -55,17 +55,17 @@ export default function Login({ setState }: ILogin) {
       </Div>
       <form
         onSubmit={formik.handleSubmit}
-        className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
+        className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full lg:w-10/12 gap-20"
       >
         <Div customClassNames="lg:col-span-2">
           <Image src={sideImage} alt="sideImage" customClassNames="w-full aspect-[0.6]" />
         </Div>
-        <Div customClassNames="bg-white border border-2 rounded-3xl border-black lg:col-span-3 gap-10 w-full">
+        <Div customClassNames="bg-white border border-2 rounded-3xl border-black lg:col-span-3 gap-5 w-full">
           <Div customClassNames="w-full border-b-2 border-black h-10 p-3">
             <Image src={loginTopButtons} alt="login"/>
           </Div>
           <Div customClassNames="flex flex-col justify-center items-center h-full p-5">
-            <H1 customClassNames="text-3xl mb-5 font-bold">Bienvenido</H1>
+            <H1 customClassNames="text-3xl mb-20 font-bold">Bienvenido</H1>
             <Div customClassNames={inputContainerClass(IsemailError || IsPassawordError)}>
               <Div customClassNames="w-full flex items-left">
                 <Span customClassNames="font-bold">Correo electronico</Span>
@@ -96,7 +96,7 @@ export default function Login({ setState }: ILogin) {
               <Button
                 onClick={() => {}}
                 onClickValue={true}
-                customClassNames="bg-yellow p-3 mt-3 w-full lg:w-96 rounded-xl text-black text-lg font-bold shadow-submitButton"
+                customClassNames="bg-yellow p-3 mt-10 w-full lg:w-96 rounded-xl text-black text-lg font-bold shadow-submitButton"
                 type="submit"
                 isDisabled={loading}
               >

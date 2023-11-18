@@ -1,3 +1,6 @@
+import { useMemo } from "react";
+import Select, { SingleValue } from "react-select";
+
 import { searchIcon, sideImageForm } from "@/assets";
 
 import Button from "@/components/atoms/Button";
@@ -8,15 +11,19 @@ import Input from "@/components/atoms/Input/Input";
 import Image from "@/components/atoms/Image";
 import Spinner from "@/components/molecules/Spinner";
 import { inputClass } from "@/components/templates/Login/Login.constants";
-import { IPersonalForm } from "./PersonalForm.types";
-import { useMemo } from "react";
 
-export default function PersonalForm({ formik, loading }: IPersonalForm) {
+import { IPersonalForm } from "./PersonalForm.types";
+import { submitButtonClasses } from "./PersonlaForm.constants";
+
+export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes }: IPersonalForm) {
   // --- Local state -----------------------------------------------------------
-  const IsValid = Boolean(Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length !== 0);
+  const IsValid = Boolean(Object.keys(formik.errors).length === 0);
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
+  const paymentOptions = useMemo(() => paymentTypes?.map(({ label, id }) => ({ label, value: id })), [paymentTypes]);
+  const ticketOptions = useMemo(() => ticketTypes?.map(({ label, id }) => ({ label, value: id })), [ticketTypes]);
+
   const errors = useMemo(() => {
     if (IsValid) return null;
 
@@ -90,7 +97,7 @@ export default function PersonalForm({ formik, loading }: IPersonalForm) {
         <Div customClassNames="flex justify-between items-center w-full p-5">
           <H1 customClassNames="text-2xl font-bold flex-1">Formato de Registro</H1>
           <Button
-            customClassNames="bg-veronica text-white flex flex-row gap-3 h-min items-center p-2 rounded-lg text-lg font-bold shadow-submitButton"
+            customClassNames="bg-veronica text-white flex flex-row gap-2 h-min items-center p-2 rounded-lg text-lg shadow-submitButton"
             type="button"
             onClick={() => {}}
             onClickValue={true}
@@ -100,58 +107,62 @@ export default function PersonalForm({ formik, loading }: IPersonalForm) {
           </Button>
         </Div>
         <Div customClassNames="flex flex-col w-full gap-8 justify-center p-8 pb-0">
-          {inputs.slice(0, inputs.length - 1).map(({ label, name, id, type, value, customClassNames, errors }) => (
-            <Div customClassNames="flex flex-col">
-              <Div customClassNames="w-full flex items-left">
-                <Span customClassNames="font-bold">{label}</Span>
+          {inputs
+            .slice(0, inputs.length - 1)
+            .map(({ label, name, id, type, value, customClassNames, errors }, index) => (
+              <Div customClassNames="flex flex-col" key={`input-${index + 1}`}>
+                <Div customClassNames="w-full flex items-left">
+                  <Span customClassNames="font-bold">{label}</Span>
+                </Div>
+                <Input
+                  id={id}
+                  name={name}
+                  type={type}
+                  value={value}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  customClassNames={customClassNames}
+                />
+                {errors && <Span customClassNames="text-red-600">{errors}</Span>}
               </Div>
-              <Input
-                id={id}
-                name={name}
-                type={type}
-                value={value}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                customClassNames={customClassNames}
-              />
-              {errors && <Span customClassNames="text-red-600">{errors}</Span>}
-            </Div>
-          ))}
+            ))}
           <Div customClassNames="lg:p-3"></Div>
           <Div customClassNames="flex flex-col">
             <Div customClassNames="w-full flex items-left">
               <Span customClassNames="font-bold">Tipo de Entrada</Span>
             </Div>
-            <Input
-              id="paymentType"
-              name="paymentType"
-              type="text"
-              value={formik.values.paymentType}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames={inputClass(errors?.paymentType)}
+            <Select
+              isSearchable={false}
+              name="ticketType"
+              options={ticketOptions}
+              onChange={(
+                e: SingleValue<{
+                  value: string;
+                  label: string;
+                }>
+              ) => formik?.setFieldValue("ticketType", e?.value)}
             />
-            {errors?.paymentType && <Span customClassNames="text-red-600">{errors?.paymentType}</Span>}
+            {errors?.ticketType && <Span customClassNames="text-red-600">{errors?.ticketType}</Span>}
           </Div>
           <Div customClassNames="flex flex-col">
             <Div customClassNames="w-full flex items-left">
               <Span customClassNames="font-bold">Metodo de Pago</Span>
             </Div>
-            <Div customClassNames="flex flex-row gap-2">
-              <Input
-                id="ticketType"
-                name="ticketType"
-                type="text"
-                value={formik.values.ticketType}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                customClassNames={inputClass(errors?.ticketType)}
-              />
-            </Div>
-            {errors?.ticketType && <Span customClassNames="text-red-600">{errors?.ticketType}</Span>}
+            <Select
+              isSearchable={false}
+              name="paymentType"
+              options={paymentOptions}
+              onChange={(
+                e: SingleValue<{
+                  value: string;
+                  label: string;
+                }>
+              ) => formik?.setFieldValue("paymentType", e?.value)}
+            />
+            {errors?.paymentType && <Span customClassNames="text-red-600">{errors?.paymentType}</Span>}
           </Div>
-          {inputs.slice(inputs.length - 1).map(({ label, name, id, type, value, customClassNames, errors }) => (
-            <Div customClassNames="flex flex-col">
+          {inputs.slice(inputs.length - 1).map(({ label, name, id, type, value, customClassNames, errors }, index) => (
+            <Div customClassNames="flex flex-col" key={`input-${index + 1}-last`}>
               <Div customClassNames="w-full flex items-left">
                 <Span customClassNames="font-bold">{label}</Span>
               </Div>
@@ -171,9 +182,7 @@ export default function PersonalForm({ formik, loading }: IPersonalForm) {
         <Button
           onClick={() => {}}
           onClickValue={true}
-          customClassNames={`bg-yellow ${
-            IsValid ? "" : "opacity-30"
-          } p-2 lg:p-3 mt-3 w-8/12 lg:w-96 rounded-xl text-black text-lg font-bold shadow-submitButton`}
+          customClassNames={submitButtonClasses()}
           type="submit"
         >
           {loading ? <Spinner /> : "Completar Pago"}

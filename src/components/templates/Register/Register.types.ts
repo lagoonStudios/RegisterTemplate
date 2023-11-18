@@ -1,8 +1,11 @@
+import { DocumentData } from "firebase/firestore";
 import { FormikValues } from "formik";
 import { Dispatch } from "react";
 
 export interface IRegister {
   setState: Dispatch<number>;
+  paymentTypes: DocumentData[];
+  ticketTypes: DocumentData[];
 }
 
 export interface ISubmitHandler {

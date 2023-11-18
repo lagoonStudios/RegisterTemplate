@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement).render(
   <React.StrictMode>
     <App />
-    <Toaster position='top-center' reverseOrder={false}/>
+    <Toaster position='top-center' reverseOrder={false} toastOptions={{ duration: 4000 }}/>
   </React.StrictMode>,
 )
 
