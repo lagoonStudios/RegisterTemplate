@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import Login from "@/components/templates/Login";
 import Register from "@/components/templates/Register";
 import Success from "@/components/templates/Success";
+import Reports from "@/components/templates/Reports";
 import { EState } from "@/pages/Main/Main.types";
 import { IWrapperComponent } from "./WrapperComponent.types";
 
@@ -12,6 +13,7 @@ export default function WrapperComponent({ user, state, setState, paymentTypes, 
     0: <Login setState={setState} />,
     1: <Register setState={setState} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />,
     2: <Success setState={setState} />,
+    3: <Reports setState={setState} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />
   };
   // --- END: Local state ------------------------------------------------------
 

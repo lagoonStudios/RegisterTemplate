@@ -15,7 +15,7 @@ import { inputClass } from "@/components/templates/Login/Login.constants";
 import { IPersonalForm } from "./PersonalForm.types";
 import { submitButtonClasses } from "./PersonlaForm.constants";
 
-export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes }: IPersonalForm) {
+export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes, setState }: IPersonalForm) {
   // --- Local state -----------------------------------------------------------
   const IsValid = Boolean(Object.keys(formik.errors).length === 0);
   // --- END: Local state ------------------------------------------------------
@@ -99,7 +99,7 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
           <Button
             customClassNames="bg-veronica text-white flex flex-row gap-2 h-min items-center p-2 rounded-lg text-lg shadow-submitButton"
             type="button"
-            onClick={() => {}}
+            onClick={() => setState(3)}
             onClickValue={true}
           >
             <Span customClassNames="hidden lg:inline">Reporte</Span>

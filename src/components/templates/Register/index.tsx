@@ -85,7 +85,7 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
           onSubmit={formik.handleSubmit}
           className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
         >
-          <PersonalForm formik={formik} loading={loading} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />
+          <PersonalForm formik={formik} loading={loading} paymentTypes={paymentTypes} ticketTypes={ticketTypes} setState={setState}/>
         </form>
       </Main>
     </>

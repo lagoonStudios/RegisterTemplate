@@ -2,8 +2,7 @@ import emailjs from "@emailjs/browser";
 import toastNotify from "react-hot-toast";
 import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
 import { firestore } from "@/config/firebase";
-import { eventId } from "@/constants/config";
-import { ISubmitHandler } from "./Register.types";
+import { ISubmitHandler } from "./Reports.types";
 
 export const sendEmail = (to_name: string, to_email: string, id: string) => {
   const templateParams = {
@@ -37,15 +36,15 @@ export const submitHandler = ({ setModal, setLoading, setState, formik, user }: 
           ticketTypeId: formik.values.ticketType,
           reference: formik.values.reference.trim(),
           /* TODO: Change when prod deploy */
-          eventId,
+          eventId: 'id6jrKAOPHWG0RBkTAfa',
           attendance: false,
           emailSended: false,
           wasPaid: true,
           vendorId: user?.uid,
           buyDate: new Date()
         })
-          .then((docRef) => {
-            sendEmail(formik.values.name, formik.values.email, docRef.id);
+          .then(() => {
+            sendEmail(formik.values.name, formik.values.email, formik.values.id);
             setLoading(false);
             setState(2);
           })

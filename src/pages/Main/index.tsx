@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EState } from "./Main.types";
 import { useAuthentication, usePaymentTypes, useTicketTypes } from "@/hooks/auth";
-import WrapperComponent from "@/components/organisms/WrapperComponent";
+import WrapperComponent from "@/components/templates/WrapperComponent";
 
 export default function Main() {
   // --- Hooks -----------------------------------------------------------------
