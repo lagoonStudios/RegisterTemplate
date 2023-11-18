@@ -17,7 +17,7 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
   );
 };
 
-export const submitHandler = ({ setModal, setLoading, setState, formik }: ISubmitHandler) => {
+export const submitHandler = ({ setModal, setLoading, setState, formik, user }: ISubmitHandler) => {
   setModal(false);
   setLoading(true);
 
@@ -28,16 +28,20 @@ export const submitHandler = ({ setModal, setLoading, setState, formik }: ISubmi
     .then(async (res) => {
       if (res.docs.length === 0) {
         await addDoc(ticketsRef, {
-          name: formik.values.name,
+          name: formik.values.name.trim(),
           email: formik.values.email.trim(),
-          identificationDoc: formik.values.id,
-          phoneNumber: formik.values.phoneNumber,
+          identificationDoc: formik.values.id.trim(),
+          phoneNumber: formik.values.phoneNumber.trim(),
           paymentTypeId: formik.values.paymentType,
           ticketTypeId: formik.values.ticketType,
-          reference: formik.values.reference,
+          reference: formik.values.reference.trim(),
+          /* TODO: Change when prod deploy */
+          eventId: 'id6jrKAOPHWG0RBkTAfa',
           attendance: false,
           emailSended: false,
           wasPaid: true,
+          vendorId: user?.uid,
+          buyDate: new Date()
         })
           .then(() => {
             sendEmail(formik.values.name, formik.values.email, formik.values.id);

@@ -35,7 +35,7 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
 
   // --- Data and handlers -----------------------------------------------------
   const onSubmit = () => {
-    submitHandler({ formik, setLoading, setModal, setState });
+    submitHandler({ formik, setLoading, setModal, setState, user });
   };
 
   const onCancel = () => {
