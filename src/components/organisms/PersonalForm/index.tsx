@@ -14,10 +14,12 @@ import { inputClass } from "@/components/templates/Login/Login.constants";
 
 import { IPersonalForm } from "./PersonalForm.types";
 import { submitButtonClasses } from "./PersonlaForm.constants";
+import { useAuthentication, useReports } from "@/hooks/auth";
 
 export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes, setState }: IPersonalForm) {
   // --- Local state -----------------------------------------------------------
   const IsValid = Boolean(Object.keys(formik.errors).length === 0);
+  const { user } = useAuthentication();
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
@@ -87,6 +89,13 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
       },
     ];
   }, [errors]);
+
+  const handleReportsData = () => {
+    // TODO Loader
+    useReports({ id: user?.uid || "", eventId: "id6jrKAOPHWG0RBkTAfa" }).then((res) => {
+      console.log("RESPUESTA: ", res);
+    });
+  };
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -99,7 +108,7 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
           <Button
             customClassNames="bg-veronica text-white flex flex-row gap-2 h-min items-center p-2 rounded-lg text-lg shadow-submitButton"
             type="button"
-            onClick={() => setState(3)}
+            onClick={handleReportsData}
             onClickValue={true}
           >
             <Span customClassNames="hidden lg:inline">Reporte</Span>
@@ -179,12 +188,7 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
             </Div>
           ))}
         </Div>
-        <Button
-          onClick={() => {}}
-          onClickValue={true}
-          customClassNames={submitButtonClasses()}
-          type="submit"
-        >
+        <Button onClick={() => {}} onClickValue={true} customClassNames={submitButtonClasses()} type="submit">
           {loading ? <Spinner /> : "Completar Pago"}
         </Button>
       </Div>

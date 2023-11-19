@@ -6,12 +6,9 @@ import { useAuthentication, useReports } from "@/hooks/auth";
 
 export default function Reports({ setState, paymentTypes, ticketTypes }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
-  const { user } = useAuthentication();
-  const data = useReports({ id: user?.uid ?? "", eventId });
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Side effects ----------------------------------------------------------
-  useEffect(() => console.log("Data", data), [data])
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------

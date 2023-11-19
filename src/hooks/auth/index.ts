@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, query, getDocs, DocumentData, where } from "firebase/firestore";
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, firestore } from "@/config/firebase";
+import { Ticket } from "@/models/app.models";
 
 /**
  * Custom hook for managing user authentication using Firebase Auth.
@@ -138,60 +139,31 @@ export function useTicketTypes() {
  * Returns an array of ticket types
  * @returns array
  */
-export function useReports({ id, eventId }: { id: string; eventId: string }) {
-  // --- Local state -----------------------------------------------------------
-  const [data, setData] = useState<DocumentData[]>([]);
-  const startDate: Date = new Date();
-  const endDate: Date = new Date();
-  startDate.setHours(0, 0, 0, 0);
-  // --- END: Local state ------------------------------------------------------
+export function useReports({ id, eventId }: { id: string; eventId: string }): Promise<Ticket[]> {
+  return new Promise((resolve, reject) => {
+    // --- Local state -----------------------------------------------------------
+    let data = [];
+    const startDate: Date = new Date();
+    const endDate: Date = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    // --- END: Local state ------------------------------------------------------
 
-  // --- Hooks -----------------------------------------------------------------
-  // --- END: Hooks ------------------------------------------------------------
+    const q = query(
+      collection(firestore, "Tickets"),
+      where("buyDate", ">=", startDate),
+      where("buyDate", "<=", endDate),
+      where("eventId", "==", eventId),
+      where("vendorId", "==", id)
+    );
 
-  // --- Side effects ----------------------------------------------------------
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const q = query(
-          collection(firestore, "Tickets"),
-          where("buyDate", ">=", startDate),
-          where("buyDate", "<=", endDate),
-          where("eventId", "==", eventId),
-          where("vendorId", "==", id)
-        );
-
-        getDocs(q).then(
-          (docsSnap) => {
-            if (!docsSnap.empty) {
-              docsSnap.docs.forEach((doc) => {
-                setData((prev) => {
-                  const isExist = prev.some((element) => element?.id === doc.id);
-                  return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
-                });
-              });
-            }
-          },
-          (error: any) => {
-            console.log(error);
-          }
-        );
-
-        // (await getDocs(q)).docs.forEach((doc) =>
-        // setData((prev) => {
-        // const isExist = prev.some((element) => element?.id === doc.id);
-
-        //return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
-        // })
-        //)
-      } catch (error) {
-        console.log(error);
+    getDocs(q).then(
+      (docsRef) => {
+        data = docsRef.docs.map((doc) => ({ ...(doc.data() as Ticket), id: doc.id }));
+        resolve(data);
+      },
+      (err) => {
+        reject(err);
       }
-    };
-
-    fetchData();
-  }, []);
-  // --- END: Side effects -----------------------------------------------------
-
-  return data;
+    );
+  });
 }
