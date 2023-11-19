@@ -92,9 +92,8 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
 
   const handleReportsData = () => {
     // TODO Loader
-    useReports({ id: user?.uid || "", eventId: "id6jrKAOPHWG0RBkTAfa" }).then((res) => {
-      console.log("RESPUESTA: ", res);
-    });
+    setState(3);
+    
   };
   // --- END: Data and handlers ------------------------------------------------
   return (
@@ -110,6 +109,7 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
             type="button"
             onClick={handleReportsData}
             onClickValue={true}
+            isDisabled={true}
           >
             <Span customClassNames="hidden lg:inline">Reporte</Span>
             <Image src={searchIcon} alt="search" />
