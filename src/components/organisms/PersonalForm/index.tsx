@@ -14,12 +14,10 @@ import { inputClass } from "@/components/templates/Login/Login.constants";
 
 import { IPersonalForm } from "./PersonalForm.types";
 import { submitButtonClasses } from "./PersonlaForm.constants";
-import { useAuthentication, useReports } from "@/hooks/auth";
 
-export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes, setState }: IPersonalForm) {
+export default function PersonalForm({ formik, loading, paymentTypes, ticketTypes, onPrintPage }: IPersonalForm) {
   // --- Local state -----------------------------------------------------------
   const IsValid = Boolean(Object.keys(formik.errors).length === 0);
-  const { user } = useAuthentication();
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
@@ -90,11 +88,8 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
     ];
   }, [errors]);
 
-  const handleReportsData = () => {
-    // TODO Loader
-    setState(3);
-    
-  };
+  const handleReportsData = () => onPrintPage();
+
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -109,7 +104,6 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
             type="button"
             onClick={handleReportsData}
             onClickValue={true}
-            isDisabled={true}
           >
             <Span customClassNames="hidden lg:inline">Reporte</Span>
             <Image src={searchIcon} alt="search" />

@@ -21,7 +21,10 @@ module.exports = {
       },
       boxShadow: {
         'submitButton': '-8px 8px 3px 5px rgba(0,0,0,1)'
-      }
+      },
+      screens: {
+        'print': { 'raw': 'print' },
+      },
     },
   },
   plugins: [],

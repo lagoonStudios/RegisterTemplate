@@ -1,6 +1,7 @@
 import * as Yup from "yup";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
+import { useReactToPrint } from "react-to-print";
 
 import Div from "@/components/atoms/Div";
 import Span from "@/components/atoms/Span";
@@ -15,6 +16,7 @@ import { IRegister } from "./Register.types";
 import { submitHandler } from "./Register.functions";
 import { logOut, useAuthentication } from "@/hooks/auth";
 import { formatValues, initialValues } from "./Register.constants";
+import Reports from "../Reports";
 
 export default function Register({ setState, paymentTypes, ticketTypes }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
@@ -25,6 +27,13 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
     initialValues,
     onSubmit: async () => setModal(true),
     validationSchema,
+  });
+
+  const componentRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    copyStyles: true,
+    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${user?.email}`,
   });
   // --- END: Hooks ------------------------------------------------------------
 
@@ -48,6 +57,8 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
     logOut();
   };
 
+  const onPrintPage = () => handlePrint();
+
   const paymentType = useMemo(() => paymentTypes?.find(({ id }) => id === formik.values.paymentType), [formik]);
   const ticketType = useMemo(() => ticketTypes?.find(({ id }) => id === formik.values.ticketType), [formik]);
 
@@ -69,13 +80,14 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
           }}
         />
       )}
+      <Reports paymentTypes={paymentTypes} ticketTypes={ticketTypes} reference={componentRef}/>
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center">
           <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
           <Div customClassNames="flex flex-row justify-between items-center gap-3">
             <Span customClassNames="hidden lg:inline">{user?.email}</Span>
             <Span customClassNames="hidden lg:inline">Contacto</Span>
-            <Button onClick={onLogout} onClickValue="">
+            <Button onClick={() => onLogout()} onClickValue="">
               Cerrar Sesion
             </Button>
           </Div>
@@ -85,7 +97,14 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
           onSubmit={formik.handleSubmit}
           className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
         >
-          <PersonalForm formik={formik} loading={loading} paymentTypes={paymentTypes} ticketTypes={ticketTypes} setState={setState}/>
+          <PersonalForm
+            onPrintPage={onPrintPage}
+            formik={formik}
+            loading={loading}
+            paymentTypes={paymentTypes}
+            ticketTypes={ticketTypes}
+            setState={setState}
+          />
         </form>
       </Main>
     </>

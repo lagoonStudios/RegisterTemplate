@@ -4,6 +4,7 @@ import { DocumentData } from "firebase/firestore";
 import { FormikValues } from "formik";
 
 export interface IPersonalForm {
+  onPrintPage: () => void;
   formik: FormikValues;
   loading: boolean;
   paymentTypes: DocumentData[];

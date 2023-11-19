@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import Login from "@/components/templates/Login";
 import Register from "@/components/templates/Register";
@@ -13,7 +13,6 @@ export default function WrapperComponent({ user, state, setState, paymentTypes, 
     0: <Login setState={setState} />,
     1: <Register setState={setState} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />,
     2: <Success setState={setState} />,
-    3: <Reports setState={setState} paymentTypes={paymentTypes} ticketTypes={ticketTypes} />
   };
   // --- END: Local state ------------------------------------------------------
 
@@ -23,7 +22,7 @@ export default function WrapperComponent({ user, state, setState, paymentTypes, 
     else if (user === undefined) return COMPONENTS[EState.Login];
 
     return COMPONENTS[state];
-  }, [user, state]);
+  }, [user, state, paymentTypes, ticketTypes]);
   // --- END: Data and handlers ------------------------------------------------
   
   return <>{component}</>;
