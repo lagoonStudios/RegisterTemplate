@@ -1,5 +1,6 @@
 export enum EState {
   Login = 0,
   Register = 1,
-  Success = 2
+  Success = 2,
+  AdminPanel = 3
 }

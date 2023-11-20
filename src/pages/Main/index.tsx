@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EState } from "./Main.types";
-import { useAuthentication, usePaymentTypes, useTicketTypes } from "@/hooks/auth";
+import { useAuthentication, usePaymentTypes, useTicketTypes, useUsers } from "@/hooks/auth";
 import WrapperComponent from "@/components/templates/WrapperComponent";
 
 export default function Main() {
@@ -8,6 +8,7 @@ export default function Main() {
   const { user } = useAuthentication();
   const paymentData = usePaymentTypes();
   const ticketData = useTicketTypes();
+  const users = useUsers()
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
@@ -18,6 +19,7 @@ export default function Main() {
     <WrapperComponent
       paymentTypes={paymentData}
       ticketTypes={ticketData}
+      users={users}
       setState={setState}
       state={state}
       user={user}

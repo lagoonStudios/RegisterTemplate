@@ -136,19 +136,19 @@ export function useTicketTypes() {
  * Returns an array of ticket types
  * @returns array
  */
-export function useReports({ id, eventId }: { id: string; eventId: string }): Promise<Ticket[]> {
+export function useReports({ id, eventId, endDate, startDate }: { id: string; eventId: string, startDate: Date, endDate: Date }): Promise<Ticket[]> {
   return new Promise((resolve, reject) => {
     // --- Local state -----------------------------------------------------------
     let data = [];
-    const startDate: Date = new Date();
-    const endDate: Date = new Date();
-    startDate.setHours(0, 0, 0, 0);
+    const startDateFormat: Date = startDate ? startDate : new Date();
+    const endDateFormat: Date = endDate ? endDate : new Date();
+    startDateFormat.setHours(0, 0, 0, 0);
     // --- END: Local state ------------------------------------------------------
 
     const q = query(
       collection(firestore, "Tickets"),
-      where("buyDate", ">=", startDate),
-      where("buyDate", "<=", endDate),
+      where("buyDate", ">=", startDateFormat),
+      where("buyDate", "<=", endDateFormat),
       where("eventId", "==", eventId),
       where("vendorId", "==", id)
     );
@@ -163,4 +163,35 @@ export function useReports({ id, eventId }: { id: string; eventId: string }): Pr
       }
     );
   });
+}
+
+/**
+ * Returns an array of ticket types
+ * @returns array
+ */
+export function useUsers() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "Users"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () =>
+      (await getDocs(q)).docs.forEach((doc) =>
+        setData((prev) => {
+          const isExist = prev.some((element) => element?.id === doc.id);
+
+          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+        })
+      );
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
 }

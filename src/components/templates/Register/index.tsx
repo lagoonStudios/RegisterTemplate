@@ -6,19 +6,20 @@ import { useReactToPrint } from "react-to-print";
 import Div from "@/components/atoms/Div";
 import Span from "@/components/atoms/Span";
 import Main from "@/components/atoms/Main";
-import Button from "@/components/atoms/Button";
 import Image from "@/components/atoms/Image";
+import Button from "@/components/atoms/Button";
+import Reports from "@/components/organisms/Reports";
 import PersonalForm from "@/components/organisms/PersonalForm";
 import ConfirmModal from "@/components/organisms/ConfirmModal";
 
 import { tdhLogo } from "@/assets";
+import { logOut, useAuthentication } from "@/hooks/auth";
+
 import { IRegister } from "./Register.types";
 import { submitHandler } from "./Register.functions";
-import { logOut, useAuthentication } from "@/hooks/auth";
 import { formatValues, initialValues } from "./Register.constants";
-import Reports from "../Reports";
 
-export default function Register({ setState, paymentTypes, ticketTypes }: IRegister) {
+export default function Register({ setState, paymentTypes, ticketTypes, users }: IRegister) {
   // --- Hooks -----------------------------------------------------------------
   const { user } = useAuthentication();
 
@@ -80,13 +81,13 @@ export default function Register({ setState, paymentTypes, ticketTypes }: IRegis
           }}
         />
       )}
-      <Reports paymentTypes={paymentTypes} ticketTypes={ticketTypes} reference={componentRef}/>
+      <Reports paymentTypes={paymentTypes} ticketTypes={ticketTypes} users={users} reference={componentRef} />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
-        <Div customClassNames="w-full flex flex-row justify-between items-center">
+        <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
           <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
           <Div customClassNames="flex flex-row justify-between items-center gap-3">
             <Span customClassNames="hidden lg:inline">{user?.email}</Span>
-            <Span customClassNames="hidden lg:inline">Contacto</Span>
+            <Button customClassNames="hidden lg:inline" onClick={() => setState(3)} onClickValue="">Panel de Administrador</Button>
             <Button onClick={() => onLogout()} onClickValue="">
               Cerrar Sesion
             </Button>

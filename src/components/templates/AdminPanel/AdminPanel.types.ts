@@ -1,12 +1,13 @@
 import { User } from "firebase/auth";
 import { DocumentData } from "firebase/firestore";
 import { FormikValues } from "formik";
-import { ForwardedRef } from 'react';
+import { Dispatch } from "react";
 
 export interface IRegister {
+  setState: Dispatch<number>;
   paymentTypes: DocumentData[];
   ticketTypes: DocumentData[];
-  reference?: ForwardedRef<HTMLDivElement>;
+  users: DocumentData[];
 }
 
 export interface ISubmitHandler {

@@ -49,7 +49,7 @@ export default function Login({ setState }: ILogin) {
 
   return (
     <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
-      <Div customClassNames="w-full flex flex-row justify-between items-center">
+      <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
         <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
         <Span>Contacto</Span>
       </Div>

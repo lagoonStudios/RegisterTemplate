@@ -13,9 +13,21 @@ import { Ticket } from "@/models/app.models";
 import { useAuthentication, useReports } from "@/hooks/auth";
 import { IRegister } from "./Reports.types";
 
-export default function Reports({ paymentTypes, ticketTypes, reference }: IRegister) {
+export default function Reports({
+  paymentTypes,
+  ticketTypes,
+  users,
+  userId,
+  startDate: _startDate,
+  endDate: _endDate,
+  reference,
+}: IRegister) {
   // --- Local state -----------------------------------------------------------
-  const date = new Date();
+  const startDate = _startDate ? _startDate : new Date();
+  const endDate = _endDate ? _endDate : new Date();
+  startDate.setHours(0, 0, 0, 0);
+  const startDateFormat = `${startDate.getDate()}/${startDate.getMonth()}/${startDate.getFullYear()} - ${startDate.getHours()}:${startDate.getMinutes()}`;
+  const endDateFormat = `${endDate.getDate()}/${endDate.getMonth()}/${endDate.getFullYear()} - ${endDate.getHours()}:${endDate.getMinutes()}`;
   const [data, setData] = useState<Ticket[]>([]);
   // --- END: Local state ------------------------------------------------------
 
@@ -25,14 +37,17 @@ export default function Reports({ paymentTypes, ticketTypes, reference }: IRegis
 
   // --- Side effects ----------------------------------------------------------
   useEffect(() => {
-    if (user?.uid) useReports({ id: user?.uid || "", eventId }).then((res) => setData(res));
-  }, [user?.uid]);
+    const id = userId ? userId : user?.uid;
+
+    if (id) useReports({ id, eventId, endDate, startDate }).then((res) => setData(res));
+  }, [user?.uid, userId, _startDate, _endDate]);
   // --- END: Side effects -----------------------------------------------------
 
+  // --- Data and handlers -----------------------------------------------------
   const ticketMounts = useMemo(() => {
     const generalTicket = ticketTypes?.find((ticketType) => ticketType.label.toLowerCase() === "general");
     const VIPTicket = ticketTypes?.find((ticketType) => ticketType.label.toLowerCase() === "vip");
-    
+
     const generalTickets = data?.filter((ticket: Ticket) => ticket?.ticketTypeId === generalTicket?.id);
     const VIPTickets = data?.filter((ticket: Ticket) => ticket?.ticketTypeId === VIPTicket?.id);
 
@@ -53,9 +68,9 @@ export default function Reports({ paymentTypes, ticketTypes, reference }: IRegis
       VIPTickets?.forEach((ticket: Ticket) => {
         if (ticket?.paymentTypeId === payment?.id) {
           const newMount = mountsVIP[payment?.label] ? mountsVIP[payment?.label] : 0;
-          const newTotalMount = mountsTotal[payment?.label] ? mountsTotal[payment?.label] : 0;  
+          const newTotalMount = mountsTotal[payment?.label] ? mountsTotal[payment?.label] : 0;
           mountsVIP[payment?.label] = newMount + 1;
-          mountsTotal[payment?.label] = newTotalMount + 1;  
+          mountsTotal[payment?.label] = newTotalMount + 1;
         }
       });
     });
@@ -67,22 +82,32 @@ export default function Reports({ paymentTypes, ticketTypes, reference }: IRegis
     };
   }, [data, paymentTypes, ticketTypes]);
 
+  const userName = useMemo(() => {
+    if(user?.uid) return users?.find((_user) => _user?.id === user.uid)?.name
+    return ''
+  }, [user, users]);
+  // --- END: Data and handlers ------------------------------------------------
+
+
   return (
-    <Main customClassNames="bg-white h-screen flex flex-col justify-center items-center p-10 gap-8 hidden print:block pt-2 px-2" reference={reference}>
+    <Main
+      customClassNames="bg-white h-screen flex flex-col justify-center items-center p-10 gap-8 hidden print:block pt-2 px-2"
+      reference={reference}
+    >
       <Div customClassNames="w-11/12 flex-1 items-center flex flex-col gap-14">
         <Div customClassNames="w-full items-center grid grid-cols-3 gap-2 text-xl font-bold">
           <Image src={tdhLogo} alt="tdh" />
           <Div customClassNames="flex flex-col gap-2 text-center">
             <H1>INGRESO DIARIO</H1>
             <h2>
-              {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
+              {startDate.getDate()}/{startDate.getMonth()}/{startDate.getFullYear()}
             </h2>
           </Div>
         </Div>
         <Div customClassNames="flex justify-between w-full p-3 border-b border-blue-800">
-          <Span customClassNames="font-bold">Caja: {user?.email}</Span>
+          <Span customClassNames="font-bold">Caja: {userName}</Span>
           <h2>
-            {date.getDate()}/{date.getMonth()}/{date.getFullYear()}
+            {startDateFormat} - {endDateFormat}
           </h2>
         </Div>
 

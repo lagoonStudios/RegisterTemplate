@@ -9,4 +9,5 @@ export interface IWrapperComponent {
   setState: React.Dispatch<React.SetStateAction<EState>>;
   paymentTypes: DocumentData[];
   ticketTypes: DocumentData[];
+  users: DocumentData[];
 }
