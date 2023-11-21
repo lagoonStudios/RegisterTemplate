@@ -7,7 +7,7 @@ import { IMain } from './Main.types';
  * @returns JSX/HTML Element wraps React Node Element that comes from the parent t
  */
 
-export default function Main({ children, customClassNames }: IMain) {
+export default function Main({ children, customClassNames, reference = undefined }: IMain) {
   // --- Hooks -----------------------------------------------------------------
   // --- END: Hooks ------------------------------------------------------------
 
@@ -25,5 +25,5 @@ export default function Main({ children, customClassNames }: IMain) {
 
   // --- Data and handlers -----------------------------------------------------
   // --- END: Data and handlers ------------------------------------------------
-  return <main className={classNames(customClassNames)}>{children}</main>;
+  return <main className={classNames(customClassNames)} ref={reference}>{children}</main>;
 }

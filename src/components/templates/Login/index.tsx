@@ -14,26 +14,26 @@ import Main from "@/components/atoms/Main";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input/Input";
 import Spinner from "@/components/molecules/Spinner";
+import Image from "@/components/atoms/Image";
 
+import { sideImage, loginTopButtons, tdhLogo } from "@/assets";
 
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Este Campo es requerido"),
-    password: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("Este Campo es requerido"),
+    email: Yup.string().required("Este Campo es requerido").email("Este campo debe ser un correo valido"),
+    password: Yup.string().min(2, "Contraseña Muy Corta!").max(50, "Too Long!").required("Este Campo es requerido"),
   });
   const formik = useFormik({
-    initialValues: { username: "", password: "" },
+    initialValues: { email: "", password: "" },
     onSubmit: (values) => {
       setLoading(true);
-      logIn(values.username, values.password)
+      logIn(values.email, values.password)
         .then(
-          (res) => {
-            setState(1);
-          },
-          (err) => {
+          () => setState(1),
+          (err) =>
             //TODO Handle login error
-            console.log('err login: ', err);}
+            console.log("err login: ", err)
         )
         .finally(() => setLoading(false));
     },
@@ -44,63 +44,68 @@ export default function Login({ setState }: ILogin) {
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState(false);
   const IsPassawordError: boolean = Boolean(formik.errors.password);
-  const IsUsernameError: boolean = Boolean(formik.errors.username);
+  const IsemailError: boolean = Boolean(formik.errors.email);
   // --- END: Local state ------------------------------------------------------
 
-  // --- Refs ------------------------------------------------------------------
-  // --- END: Refs -------------------------------------------------------------
-
-  // --- Redux -----------------------------------------------------------------
-  // --- END: Redux ------------------------------------------------------------
-
-  // --- Side effects ----------------------------------------------------------
-  // --- END: Side effects -----------------------------------------------------
-
-  // --- Data and handlers -----------------------------------------------------
-  // --- END: Data and handlers ------------------------------------------------
   return (
-    <>
-      <Main customClassNames="bg-mint-cream h-screen flex flex-1 justify-center items-center">
-        <form
-          onSubmit={formik.handleSubmit}
-          className="bg-white w-4/5 lg:w-2/5 h-3/5 lg:h-4/5 lg:p-5 flex flex-col items-center gap-5 md:gap-10 justify-center rounded-lg overflow-y-scroll"
-        >
-          <H1 customClassNames="text-3xl">Inicio de Sesión</H1>
-          <Div customClassNames={inputContainerClass(IsUsernameError || IsPassawordError)}>
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              value={formik.values.username}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames={inputClass(IsUsernameError)}
-              placeholder="Usuario"
-            />
-            {IsUsernameError && <Span customClassNames="text-red-600">{formik?.errors?.username}</Span>}
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formik.values.password}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              customClassNames={inputClass(IsPassawordError)}
-              placeholder="Contraseña"
-            />
-            {IsPassawordError && <Span customClassNames="text-red-600">{formik?.errors?.password}</Span>}
-            <Button
-              onClick={() => {}}
-              onClickValue={true}
-              customClassNames="bg-mint p-4 mt-3 w-full lg:w-96 rounded-full text-white text-lg"
-              type="submit"
-              isDisabled={loading}
-            >
-              {loading ? <Spinner /> : "Ingresar"}
-            </Button>
+    <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
+      <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
+        <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
+        <Span>Contacto</Span>
+      </Div>
+      <form
+        onSubmit={formik.handleSubmit}
+        className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full lg:w-10/12 gap-20"
+      >
+        <Div customClassNames="lg:col-span-2">
+          <Image src={sideImage} alt="sideImage" customClassNames="w-full aspect-[0.6]" />
+        </Div>
+        <Div customClassNames="bg-white border border-2 rounded-3xl border-black lg:col-span-3 gap-5 w-full">
+          <Div customClassNames="w-full border-b-2 border-black h-10 p-3">
+            <Image src={loginTopButtons} alt="login"/>
           </Div>
-        </form>
-      </Main>
-    </>
+          <Div customClassNames="flex flex-col justify-center items-center h-full p-5">
+            <H1 customClassNames="text-3xl mb-20 font-bold">Bienvenido</H1>
+            <Div customClassNames={inputContainerClass(IsemailError || IsPassawordError)}>
+              <Div customClassNames="w-full flex items-left">
+                <Span customClassNames="font-bold">Correo electronico</Span>
+              </Div>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formik.values.email}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                customClassNames={inputClass(IsemailError)}
+              />
+              {IsemailError && <Span customClassNames="text-red-600">{formik?.errors?.email}</Span>}
+              <Div customClassNames="w-full flex items-left">
+                <Span customClassNames="font-bold">Contraseña</Span>
+              </Div>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formik.values.password}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                customClassNames={inputClass(IsPassawordError)}
+              />
+              {IsPassawordError && <Span customClassNames="text-red-600">{formik?.errors?.password}</Span>}
+              <Button
+                onClick={() => {}}
+                onClickValue={true}
+                customClassNames="bg-yellow p-3 mt-10 w-full lg:w-96 rounded-xl text-black text-lg font-bold shadow-submitButton"
+                type="submit"
+                isDisabled={loading}
+              >
+                {loading ? <Spinner /> : "Iniciar Sesión"}
+              </Button>
+            </Div>
+          </Div>
+        </Div>
+      </form>
+    </Main>
   );
 }

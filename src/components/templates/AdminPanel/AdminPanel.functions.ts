@@ -1,9 +1,9 @@
 import emailjs from "@emailjs/browser";
 import toastNotify from "react-hot-toast";
-import { getDocs, collection, query, where, addDoc, DocumentData } from "firebase/firestore";
+import { getDocs, collection, query, where, addDoc } from "firebase/firestore";
 import { firestore } from "@/config/firebase";
 import { eventId } from "@/constants/config";
-import { ISubmitHandler } from "./Register.types";
+import { ISubmitHandler } from "./AdminPanel.types";
 
 export const sendEmail = (to_name: string, to_email: string, id: string) => {
   const templateParams = {
@@ -65,8 +65,3 @@ export const submitHandler = ({ setModal, setLoading, setState, formik, user }: 
       setLoading(false);
     });
 };
-
-export const getUserName = (userId: string, users: DocumentData[]) => {
-  if(!users) return ''
-  return users?.find((_user) => _user?.id === userId)?.name?.replace(' ', '_');
-}

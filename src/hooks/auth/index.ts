@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { collection, query, getDocs, DocumentData, where } from "firebase/firestore";
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "@/config/firebase";
+import { auth, firestore } from "@/config/firebase";
+import { Ticket } from "@/models/app.models";
 
 /**
  * Custom hook for managing user authentication using Firebase Auth.
@@ -22,9 +24,6 @@ export function useAuthentication() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         setUser(user);
-      } else {
-        // User is signed out
-        setUser(undefined);
       }
     });
 
@@ -70,4 +69,129 @@ export function useAuthErrorMessage(message: string): string {
   const mappedMessage = Object.keys(errorMessageMap).find((key) => message.includes(key));
 
   return mappedMessage ? errorMessageMap[mappedMessage] : defaultMessage;
+}
+
+/**
+ * Returns an array of payment types
+ * @returns array
+ */
+export function usePaymentTypes() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "PaymentTypes"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () =>
+      (await getDocs(q)).docs.forEach((doc) =>
+        setData((prev) => {
+          const isExist = prev.some((element) => element?.id === doc.id);
+
+          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+        })
+      );
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
+}
+
+/**
+ * Returns an array of ticket types
+ * @returns array
+ */
+export function useTicketTypes() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "TicketTypes"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () =>
+      (await getDocs(q)).docs.forEach((doc) =>
+        setData((prev) => {
+          const isExist = prev.some((element) => element?.id === doc.id);
+
+          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+        })
+      );
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
+}
+/**
+ * Returns an array of ticket types
+ * @returns array
+ */
+export function useReports({ id, eventId, endDate, startDate }: { id: string; eventId: string, startDate: Date, endDate: Date }): Promise<Ticket[]> {
+  return new Promise((resolve, reject) => {
+    // --- Local state -----------------------------------------------------------
+    let data = [];
+    const startDateFormat: Date = startDate ? startDate : new Date();
+    const endDateFormat: Date = endDate ? endDate : new Date();
+    startDateFormat.setHours(0, 0, 0, 0);
+    // --- END: Local state ------------------------------------------------------
+
+    const q = query(
+      collection(firestore, "Tickets"),
+      where("buyDate", ">=", startDateFormat),
+      where("buyDate", "<=", endDateFormat),
+      where("eventId", "==", eventId),
+      where("vendorId", "==", id)
+    );
+
+    getDocs(q).then(
+      (docsRef) => {
+        data = docsRef.docs.map((doc) => ({ ...(doc.data() as Ticket), id: doc.id }));
+        resolve(data);
+      },
+      (err) => {
+        reject(err);
+      }
+    );
+  });
+}
+
+/**
+ * Returns an array of ticket types
+ * @returns array
+ */
+export function useUsers() {
+  // --- Hooks -----------------------------------------------------------------
+  const q = query(collection(firestore, "Users"));
+  // --- END: Hooks ------------------------------------------------------------
+
+  // --- Local state -----------------------------------------------------------
+  const [data, setData] = useState<DocumentData[]>([]);
+  // --- END: Local state ------------------------------------------------------
+
+  // --- Side effects ----------------------------------------------------------
+  useEffect(() => {
+    const fetchData = async () =>
+      (await getDocs(q)).docs.forEach((doc) =>
+        setData((prev) => {
+          const isExist = prev.some((element) => element?.id === doc.id);
+
+          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+        })
+      );
+
+    fetchData();
+  }, []);
+  // --- END: Side effects -----------------------------------------------------
+
+  return data;
 }
