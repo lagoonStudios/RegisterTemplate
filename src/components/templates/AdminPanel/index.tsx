@@ -12,8 +12,25 @@ import { tdhLogo } from "@/assets";
 import { IRegister } from "./AdminPanel.types";
 import { logOut, useAuthentication } from "@/hooks/auth";
 import Reports from "../../organisms/Reports";
+import { getUserName } from "../Register/Register.functions";
 
 export default function AdminPanel({ setState, paymentTypes, ticketTypes, users }: IRegister) {
+  
+  // --- Local state -----------------------------------------------------------
+  const [userSelected, setUserSelected] = useState({ label: "Todos", value: "all" });
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  // --- END: Local state ------------------------------------------------------
+  
+  // --- Data and handlers -----------------------------------------------------
+  const onLogout = () => {
+    setState(0);
+    logOut();
+  };
+  
+  const onPrintPage = () => handlePrint();
+  // --- END: Data and handlers ------------------------------------------------
+
   // --- Hooks -----------------------------------------------------------------
   const { user } = useAuthentication();
 
@@ -21,24 +38,9 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     copyStyles: true,
-    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${user?.email}`,
+    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${getUserName(userSelected?.value ?? '',users)}`,
   });
   // --- END: Hooks ------------------------------------------------------------
-
-  // --- Local state -----------------------------------------------------------
-  const [userSelected, setUserSelected] = useState({ label: "Todos", value: "all" });
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  // --- END: Local state ------------------------------------------------------
-
-  // --- Data and handlers -----------------------------------------------------
-  const onLogout = () => {
-    setState(0);
-    logOut();
-  };
-
-  const onPrintPage = () => handlePrint();
-  // --- END: Data and handlers ------------------------------------------------
   return (
     <>
       <Reports

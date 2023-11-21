@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { format, addDays } from "date-fns";
 
 import H1 from "@/components/atoms/H1";
 import Div from "@/components/atoms/Div";
@@ -23,11 +24,12 @@ export default function Reports({
   reference,
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
-  const startDate = _startDate ? _startDate : new Date();
-  const endDate = _endDate ? _endDate : new Date();
+  const startDate = _startDate ? addDays(_startDate, 1) : new Date();
+  const endDate = _endDate ? addDays(_endDate, 1) : new Date();
   startDate.setHours(0, 0, 0, 0);
-  const startDateFormat = `${startDate.getDate()}/${startDate.getMonth()}/${startDate.getFullYear()} - ${startDate.getHours()}:${startDate.getMinutes()}`;
-  const endDateFormat = `${endDate.getDate()}/${endDate.getMonth()}/${endDate.getFullYear()} - ${endDate.getHours()}:${endDate.getMinutes()}`;
+  const startDateFormat = format(startDate, "dd/LL/yyyy  hh:mm aaaa");
+  const startDateTitleFormat = format(startDate, "dd/LL/yyyy");
+  const endDateFormat = format(endDate, "dd/LL/yyyy hh:mm aaaa");
   const [data, setData] = useState<Ticket[]>([]);
   // --- END: Local state ------------------------------------------------------
 
@@ -83,11 +85,11 @@ export default function Reports({
   }, [data, paymentTypes, ticketTypes]);
 
   const userName = useMemo(() => {
-    if(user?.uid) return users?.find((_user) => _user?.id === user.uid)?.name
-    return ''
-  }, [user, users]);
+    if (userId) return users?.find((_user) => _user?.id === userId)?.name;
+    if (user?.uid) return users?.find((_user) => _user?.id === user.uid)?.name;
+    return "";
+  }, [user, users, userId]);
   // --- END: Data and handlers ------------------------------------------------
-
 
   return (
     <Main
@@ -99,9 +101,7 @@ export default function Reports({
           <Image src={tdhLogo} alt="tdh" />
           <Div customClassNames="flex flex-col gap-2 text-center">
             <H1>INGRESO DIARIO</H1>
-            <h2>
-              {startDate.getDate()}/{startDate.getMonth()}/{startDate.getFullYear()}
-            </h2>
+            <h2>{startDateTitleFormat}</h2>
           </Div>
         </Div>
         <Div customClassNames="flex justify-between w-full p-3 border-b border-blue-800">
@@ -173,6 +173,10 @@ export default function Reports({
           <Div customClassNames="flex flex-col gap-5 font-bold">
             <Span>Efectivo Bs</Span>
             <Span>{ticketMounts?.total?.["Bolívares en efectivo"] ?? 0}</Span>
+          </Div>
+          <Div customClassNames="flex flex-col gap-5 font-bold col-span-full mt-5">
+            <Span>Total de Entradas</Span>
+            <Span>{Object.values(ticketMounts.total).reduce((total, value) => total + value, 0)}</Span>
           </Div>
         </Div>
       </Div>

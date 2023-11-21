@@ -16,7 +16,7 @@ import { tdhLogo } from "@/assets";
 import { logOut, useAuthentication } from "@/hooks/auth";
 
 import { IRegister } from "./Register.types";
-import { submitHandler } from "./Register.functions";
+import { getUserName, submitHandler } from "./Register.functions";
 import { formatValues, initialValues } from "./Register.constants";
 
 export default function Register({ setState, paymentTypes, ticketTypes, users }: IRegister) {
@@ -34,7 +34,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     copyStyles: true,
-    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${user?.email}`,
+    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${getUserName(user?.uid ?? '',users)}`,
   });
   // --- END: Hooks ------------------------------------------------------------
 
@@ -63,6 +63,11 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   const paymentType = useMemo(() => paymentTypes?.find(({ id }) => id === formik.values.paymentType), [formik]);
   const ticketType = useMemo(() => ticketTypes?.find(({ id }) => id === formik.values.ticketType), [formik]);
 
+  const isAdmin = useMemo(() => {
+    if(user?.uid) return Boolean(users?.find((_user) => _user?.id === user.uid)?.roles?.some((value:any) => String(value) === 'ADMIN'))
+    return false
+  }, [user, users])
+
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
@@ -87,7 +92,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
           <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
           <Div customClassNames="flex flex-row justify-between items-center gap-3">
             <Span customClassNames="hidden lg:inline">{user?.email}</Span>
-            <Button customClassNames="hidden lg:inline" onClick={() => setState(3)} onClickValue="">Panel de Administrador</Button>
+            <Button customClassNames="hidden lg:inline" onClick={() => setState(3)} onClickValue="" isDisabled={!isAdmin}>Panel de Administrador</Button>
             <Button onClick={() => onLogout()} onClickValue="">
               Cerrar Sesion
             </Button>
