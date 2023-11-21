@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "ticketscan-dev"
-  }
+    "default": "ticketscan-dev",
+    "production": "ticketscann",
+    "development": "ticketscan-dev"
+  },
+  "targets": {},
+  "etags": {}
 }
