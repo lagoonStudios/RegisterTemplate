@@ -5,11 +5,19 @@ import { firestore } from "@/config/firebase";
 import { eventId } from "@/constants/config";
 import { ISubmitHandler } from "./Register.types";
 
-export const sendEmail = (to_name: string, to_email: string, id: string) => {
+export const sendEmail = (
+  to_name: string,
+  to_email: string,
+  id: string,
+  identificationDoc: string,
+  tickeType: string
+) => {
   const templateParams = {
     to_name,
     to_email,
     qr: "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + id,
+    identification_doc: identificationDoc,
+    ticket_type: tickeType,
   };
   // serviceId, templateId, templateParams, publicKey
   emailjs.send("service_5cted8p", "template_9g9dpch", templateParams, "cgmGhlqI_1tJf45Y3").then(
@@ -18,7 +26,7 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
   );
 };
 
-export const submitHandler = ({ setModal, setLoading, setState, formik, user }: ISubmitHandler) => {
+export const submitHandler = ({ setModal, setLoading, setState, formik, user, ticketType }: ISubmitHandler) => {
   setModal(false);
   setLoading(true);
 
@@ -42,10 +50,10 @@ export const submitHandler = ({ setModal, setLoading, setState, formik, user }: 
           emailSended: false,
           wasPaid: true,
           vendorId: user?.uid,
-          buyDate: new Date()
+          buyDate: new Date(),
         })
           .then((docRef) => {
-            sendEmail(formik.values.name, formik.values.email, docRef.id);
+            sendEmail(formik.values.name, formik.values.email, docRef.id, formik.values.id.trim(), ticketType);
             setLoading(false);
             setState(2);
           })
@@ -67,6 +75,6 @@ export const submitHandler = ({ setModal, setLoading, setState, formik, user }: 
 };
 
 export const getUserName = (userId: string, users: DocumentData[]) => {
-  if(!users) return ''
-  return users?.find((_user) => _user?.id === userId)?.name?.replace(' ', '_');
-}
+  if (!users) return "";
+  return users?.find((_user) => _user?.id === userId)?.name?.replace(" ", "_");
+};

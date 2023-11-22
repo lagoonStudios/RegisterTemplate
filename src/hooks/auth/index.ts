@@ -95,12 +95,7 @@ export function usePaymentTypes() {
         })
       );
 
-    const localKey = "paymentType";
-    const localData = localStorage.getItem(localKey);
-    const localParserData = localData !== null ? JSON.parse(localData) : false;
-
-    if (localParserData) setData(localParserData);
-    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
+    fetchData();
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
@@ -131,12 +126,7 @@ export function useTicketTypes() {
         })
       );
 
-    const localKey = "ticketType";
-    const localData = localStorage.getItem(localKey);
-    const localParserData = localData !== null ? JSON.parse(localData) : false;
-
-    if (localParserData) setData(localParserData);
-    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
+    fetchData();
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
@@ -165,13 +155,21 @@ export function useReports({
     startDateFormat.setHours(0, 0, 0, 0);
     // --- END: Local state ------------------------------------------------------
 
-    const q = query(
-      collection(firestore, "Tickets"),
-      where("buyDate", ">=", startDateFormat),
-      where("buyDate", "<=", endDateFormat),
-      where("eventId", "==", eventId),
-      where("vendorId", "==", id)
-    );
+    const q =
+      id === "all"
+        ? query(
+            collection(firestore, "Tickets"),
+            where("buyDate", ">=", startDateFormat),
+            where("buyDate", "<=", endDateFormat),
+            where("eventId", "==", eventId)
+          )
+        : query(
+            collection(firestore, "Tickets"),
+            where("buyDate", ">=", startDateFormat),
+            where("buyDate", "<=", endDateFormat),
+            where("eventId", "==", eventId),
+            where("vendorId", "==", id)
+          );
 
     getDocs(q).then(
       (docsRef) => {
@@ -209,12 +207,7 @@ export function useUsers() {
         })
       );
 
-    const localKey = "users";
-    const localData = localStorage.getItem(localKey);
-    const localParserData = localData !== null ? JSON.parse(localData) : false;
-
-    if (localParserData) setData(localParserData);
-    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
+    fetchData();
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
