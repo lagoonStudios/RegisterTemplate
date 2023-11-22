@@ -11,5 +11,6 @@ export interface IAdminForm {
     }>
   >;
   setStartDate: React.Dispatch<React.SetStateAction<Date>>;
-  setEndDate: React.Dispatch<React.SetStateAction<Date>>
+  setEndDate: React.Dispatch<React.SetStateAction<Date>>;
+  loading: boolean;
 }

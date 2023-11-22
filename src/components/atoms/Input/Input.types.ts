@@ -13,4 +13,5 @@ export type IInput = {
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onChange: ChangeEventHandler<HTMLInputElement>;
   pattern?: string
+  disabled?: boolean;
 };

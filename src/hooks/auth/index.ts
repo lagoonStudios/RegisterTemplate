@@ -136,7 +136,17 @@ export function useTicketTypes() {
  * Returns an array of ticket types
  * @returns array
  */
-export function useReports({ id, eventId, endDate, startDate }: { id: string; eventId: string, startDate: Date, endDate: Date }): Promise<Ticket[]> {
+export function useReports({
+  id,
+  eventId,
+  endDate,
+  startDate,
+}: {
+  id: string;
+  eventId: string;
+  startDate: Date;
+  endDate: Date;
+}): Promise<Ticket[]> {
   return new Promise((resolve, reject) => {
     // --- Local state -----------------------------------------------------------
     let data = [];
@@ -145,13 +155,21 @@ export function useReports({ id, eventId, endDate, startDate }: { id: string; ev
     startDateFormat.setHours(0, 0, 0, 0);
     // --- END: Local state ------------------------------------------------------
 
-    const q = query(
-      collection(firestore, "Tickets"),
-      where("buyDate", ">=", startDateFormat),
-      where("buyDate", "<=", endDateFormat),
-      where("eventId", "==", eventId),
-      where("vendorId", "==", id)
-    );
+    const q =
+      id === "all"
+        ? query(
+            collection(firestore, "Tickets"),
+            where("buyDate", ">=", startDateFormat),
+            where("buyDate", "<=", endDateFormat),
+            where("eventId", "==", eventId)
+          )
+        : query(
+            collection(firestore, "Tickets"),
+            where("buyDate", ">=", startDateFormat),
+            where("buyDate", "<=", endDateFormat),
+            where("eventId", "==", eventId),
+            where("vendorId", "==", id)
+          );
 
     getDocs(q).then(
       (docsRef) => {

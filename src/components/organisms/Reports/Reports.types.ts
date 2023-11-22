@@ -11,6 +11,7 @@ export interface IRegister {
   userId?: string;
   startDate?: Date;
   endDate?: Date;
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface ISubmitHandler {

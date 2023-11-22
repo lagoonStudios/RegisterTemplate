@@ -9,6 +9,7 @@ import { IAdminForm } from "./AdminForm.types";
 import { submitButtonClasses, backButtonClasses } from "./AdminForm.constants";
 import Span from "@/components/atoms/Span";
 import Input from "@/components/atoms/Input/Input";
+import Spinner from "@/components/molecules/Spinner";
 
 export default function AdminForm({
   users,
@@ -17,6 +18,7 @@ export default function AdminForm({
   setUserSelected,
   setStartDate,
   setEndDate,
+  loading
 }: IAdminForm) {
   // --- Local state -----------------------------------------------------------
   // --- END: Local state ------------------------------------------------------
@@ -25,8 +27,7 @@ export default function AdminForm({
   const handleReportsData = () => onPrintPage();
 
   const usersOptions = useMemo(() => {
-    /* TODO: Add logic to all tickets */
-    return [/* { label: "Todos", value: "all" }, */ ...users?.map((user) => ({ label: user.name, value: user?.id }))];
+    return [{ label: "Todas las cajas", value: "all" }, ...users?.map((user) => ({ label: user.name, value: user?.id }))];
   }, [users]);
   // --- END: Data and handlers ------------------------------------------------
   return (
@@ -51,6 +52,7 @@ export default function AdminForm({
               ) => {
                 if (e) setUserSelected({ label: e.label, value: e.value });
               }}
+              isDisabled={loading}
             />
           </Div>
           <Div customClassNames="col-start-1 flex flex-col gap-2">
@@ -63,6 +65,7 @@ export default function AdminForm({
                 if (e.target.valueAsDate) setStartDate(e.target.valueAsDate);
               }}
               customClassNames="border p-1"
+              disabled={loading}
             />
           </Div>
           <Div customClassNames="flex flex-col gap-2">
@@ -75,6 +78,7 @@ export default function AdminForm({
                 if (e.target.valueAsDate) setEndDate(e.target.valueAsDate);
               }}
               customClassNames="border p-1"
+              disabled={loading}
             />
           </Div>
         </Div>
@@ -83,8 +87,8 @@ export default function AdminForm({
         <Button onClick={() => setState(1)} onClickValue={true} customClassNames={backButtonClasses()} type="button">
           Volver
         </Button>
-        <Button onClick={handleReportsData} onClickValue={true} customClassNames={submitButtonClasses()} type="button">
-          {"Completar"}
+        <Button onClick={handleReportsData} onClickValue={true} customClassNames={submitButtonClasses()} type="button" isDisabled={loading}>
+          {loading ? <Spinner/> :"Completar"}
         </Button>
       </Div>
     </Div>
