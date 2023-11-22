@@ -36,12 +36,12 @@ export const submitHandler = ({ setModal, setLoading, setState, formik, user }: 
           ticketTypeId: formik.values.ticketType,
           reference: formik.values.reference.trim(),
           /* TODO: Change when prod deploy */
-          eventId: 'id6jrKAOPHWG0RBkTAfa',
+          eventId: "myKXcWlZsXCNbtwKw7P2",
           attendance: false,
           emailSended: false,
           wasPaid: true,
           vendorId: user?.uid,
-          buyDate: new Date()
+          buyDate: new Date(),
         })
           .then(() => {
             sendEmail(formik.values.name, formik.values.email, formik.values.id);

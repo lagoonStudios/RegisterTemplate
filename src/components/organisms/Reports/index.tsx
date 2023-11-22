@@ -22,6 +22,7 @@ export default function Reports({
   startDate: _startDate,
   endDate: _endDate,
   reference,
+  setLoading
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const startDate = _startDate ? addDays(_startDate, 1) : new Date();
@@ -41,7 +42,10 @@ export default function Reports({
   useEffect(() => {
     const id = userId ? userId : user?.uid;
 
-    if (id) useReports({ id, eventId, endDate, startDate }).then((res) => setData(res));
+    if (id) {
+      setLoading?.(true)
+      useReports({ id, eventId, endDate, startDate }).then((res) => setData(res)).finally(() => setLoading?.(false));
+    }
   }, [user?.uid, userId, _startDate, _endDate]);
   // --- END: Side effects -----------------------------------------------------
 
@@ -85,6 +89,7 @@ export default function Reports({
   }, [data, paymentTypes, ticketTypes]);
 
   const userName = useMemo(() => {
+    if(userId === 'all') return 'Todas las cajas'
     if (userId) return users?.find((_user) => _user?.id === userId)?.name;
     if (user?.uid) return users?.find((_user) => _user?.id === user.uid)?.name;
     return "";

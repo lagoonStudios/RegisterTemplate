@@ -15,7 +15,8 @@ export default function Input({
   max,
   min,
   placeholder,
-  pattern
+  pattern,
+  disabled
 }: IInput): JSX.Element {
   // --- Hooks -----------------------------------------------------------------
   // --- END: Hooks ------------------------------------------------------------
@@ -44,6 +45,7 @@ export default function Input({
       onChange={onChange}
       placeholder={placeholder}
       pattern={pattern}
+      disabled={disabled}
     />
   );
 }

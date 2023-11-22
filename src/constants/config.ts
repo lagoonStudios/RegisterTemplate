@@ -1,3 +1,3 @@
-const eventId = 'id6jrKAOPHWG0RBkTAfa'
+const eventId = "myKXcWlZsXCNbtwKw7P2";
 
-export { eventId }
+export { eventId };
