@@ -17,7 +17,8 @@ import { getUserName } from "../Register/Register.functions";
 export default function AdminPanel({ setState, paymentTypes, ticketTypes, users }: IRegister) {
   
   // --- Local state -----------------------------------------------------------
-  const [userSelected, setUserSelected] = useState({ label: "Todos", value: "all" });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [userSelected, setUserSelected] = useState({ label: "Todas las cajas", value: "all" });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   // --- END: Local state ------------------------------------------------------
@@ -44,13 +45,14 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
   return (
     <>
       <Reports
-        userId={userSelected.value === "all" ? undefined : userSelected.value}
+        userId={userSelected.value}
         paymentTypes={paymentTypes}
         ticketTypes={ticketTypes}
         users={users}
         reference={componentRef}
         endDate={endDate}
         startDate={startDate}
+        setLoading={setLoading}
       />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-screen flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
@@ -72,6 +74,7 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
             setUserSelected={setUserSelected}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            loading={loading}
           />
         </Div>
       </Main>

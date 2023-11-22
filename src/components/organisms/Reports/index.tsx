@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { format, addDays } from "date-fns";
+import { format, addDays, endOfDay } from "date-fns";
 
 import H1 from "@/components/atoms/H1";
 import Div from "@/components/atoms/Div";
@@ -22,10 +22,11 @@ export default function Reports({
   startDate: _startDate,
   endDate: _endDate,
   reference,
+  setLoading
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const startDate = _startDate ? addDays(_startDate, 1) : new Date();
-  const endDate = _endDate ? addDays(_endDate, 1) : new Date();
+  const endDate = _endDate ? endOfDay(addDays(_endDate, 1)) : new Date();
   startDate.setHours(0, 0, 0, 0);
   const startDateFormat = format(startDate, "dd/LL/yyyy  hh:mm aaaa");
   const startDateTitleFormat = format(startDate, "dd/LL/yyyy");
@@ -41,7 +42,10 @@ export default function Reports({
   useEffect(() => {
     const id = userId ? userId : user?.uid;
 
-    if (id) useReports({ id, eventId, endDate, startDate }).then((res) => setData(res));
+    if (id) {
+      setLoading?.(true)
+      useReports({ id, eventId, endDate, startDate }).then((res) => setData(res)).finally(() => setLoading?.(false));
+    }
   }, [user?.uid, userId, _startDate, _endDate]);
   // --- END: Side effects -----------------------------------------------------
 
@@ -85,6 +89,7 @@ export default function Reports({
   }, [data, paymentTypes, ticketTypes]);
 
   const userName = useMemo(() => {
+    if(userId === 'all') return 'Todas las cajas'
     if (userId) return users?.find((_user) => _user?.id === userId)?.name;
     if (user?.uid) return users?.find((_user) => _user?.id === user.uid)?.name;
     return "";

@@ -44,30 +44,30 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-  const onSubmit = () => {
-    submitHandler({ formik, setLoading, setModal, setState, user });
-  };
-
+  
   const onCancel = () => {
     setModal(false);
     setLoading(false);
   };
-
+  
   const onLogout = () => {
     setState(0);
     logOut();
   };
-
+  
   const onPrintPage = () => handlePrint();
-
+  
   const paymentType = useMemo(() => paymentTypes?.find(({ id }) => id === formik.values.paymentType), [formik]);
   const ticketType = useMemo(() => ticketTypes?.find(({ id }) => id === formik.values.ticketType), [formik]);
-
+  
   const isAdmin = useMemo(() => {
     if(user?.uid) return Boolean(users?.find((_user) => _user?.id === user.uid)?.roles?.some((value:any) => String(value) === 'ADMIN'))
     return false
-  }, [user, users])
+}, [user, users])
 
+  const onSubmit = () => {
+    submitHandler({ formik, setLoading, setModal, setState, user, ticketType: ticketType?.label });
+  };
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
