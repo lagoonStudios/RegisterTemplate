@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { format, addDays } from "date-fns";
+import { format, addDays, endOfDay } from "date-fns";
 
 import H1 from "@/components/atoms/H1";
 import Div from "@/components/atoms/Div";
@@ -26,7 +26,7 @@ export default function Reports({
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const startDate = _startDate ? addDays(_startDate, 1) : new Date();
-  const endDate = _endDate ? addDays(_endDate, 1) : new Date();
+  const endDate = _endDate ? endOfDay(addDays(_endDate, 1)) : new Date();
   startDate.setHours(0, 0, 0, 0);
   const startDateFormat = format(startDate, "dd/LL/yyyy  hh:mm aaaa");
   const startDateTitleFormat = format(startDate, "dd/LL/yyyy");
