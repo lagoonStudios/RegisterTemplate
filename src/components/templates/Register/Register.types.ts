@@ -16,4 +16,5 @@ export interface ISubmitHandler {
   setLoading: (value: React.SetStateAction<boolean>) => void;
   setState: React.Dispatch<number>;
   user?: User;
+  ticketType: string;
 }
