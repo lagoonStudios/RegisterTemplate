@@ -95,7 +95,12 @@ export function usePaymentTypes() {
         })
       );
 
-    fetchData();
+    const localKey = "paymentType";
+    const localData = localStorage.getItem(localKey);
+    const localParserData = localData !== null ? JSON.parse(localData) : false;
+
+    if (localParserData) setData(localParserData);
+    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
@@ -126,7 +131,12 @@ export function useTicketTypes() {
         })
       );
 
-    fetchData();
+    const localKey = "ticketType";
+    const localData = localStorage.getItem(localKey);
+    const localParserData = localData !== null ? JSON.parse(localData) : false;
+
+    if (localParserData) setData(localParserData);
+    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
@@ -136,7 +146,17 @@ export function useTicketTypes() {
  * Returns an array of ticket types
  * @returns array
  */
-export function useReports({ id, eventId, endDate, startDate }: { id: string; eventId: string, startDate: Date, endDate: Date }): Promise<Ticket[]> {
+export function useReports({
+  id,
+  eventId,
+  endDate,
+  startDate,
+}: {
+  id: string;
+  eventId: string;
+  startDate: Date;
+  endDate: Date;
+}): Promise<Ticket[]> {
   return new Promise((resolve, reject) => {
     // --- Local state -----------------------------------------------------------
     let data = [];
@@ -189,7 +209,12 @@ export function useUsers() {
         })
       );
 
-    fetchData();
+    const localKey = "users";
+    const localData = localStorage.getItem(localKey);
+    const localParserData = localData !== null ? JSON.parse(localData) : false;
+
+    if (localParserData) setData(localParserData);
+    else fetchData().then(() => localStorage.setItem(localKey, JSON.stringify(data)));
   }, []);
   // --- END: Side effects -----------------------------------------------------
 
