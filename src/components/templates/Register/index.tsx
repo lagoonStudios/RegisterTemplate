@@ -40,6 +40,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
 
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState<boolean>(false);
+  const [notTriggerPDF, setTrigger] = useState<boolean>(true);
   const [isCompleted, setComplete] = useState<boolean>(false);
   const [isOpenModal, setModal] = useState(false);
   // --- END: Local state ------------------------------------------------------
@@ -70,6 +71,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   }, [user, users]);
 
   const onSubmit = () => {
+    setTrigger(false)
     submitHandler({ formik, setLoading, setModal, setState, user, ticketType: ticketType?.label });
   };
   // --- END: Data and handlers ------------------------------------------------
@@ -97,7 +99,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
         reference={componentRef}
         loading={loading}
         setLoading={setLoading}
-        isCompleted={isCompleted}
+        isCompleted={isCompleted && notTriggerPDF}
         setComplete={setComplete}
         onPrintPage={onPrintPage}
       />
@@ -125,7 +127,10 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
           className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
         >
           <PersonalForm
-            onPrintPage={() => setLoading(true)}
+            onPrintPage={() => {
+              setTrigger(true)
+              setLoading(true)
+            }}
             formik={formik}
             loading={loading}
             paymentTypes={paymentTypes}
