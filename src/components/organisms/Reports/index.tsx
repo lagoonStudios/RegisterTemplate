@@ -22,7 +22,11 @@ export default function Reports({
   startDate: _startDate,
   endDate: _endDate,
   reference,
-  setLoading
+  loading,
+  setLoading,
+  isCompleted,
+  setComplete,
+  onPrintPage
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const startDate = _startDate ? addDays(_startDate, 1) : new Date();
@@ -40,13 +44,28 @@ export default function Reports({
 
   // --- Side effects ----------------------------------------------------------
   useEffect(() => {
-    const id = userId ? userId : user?.uid;
-
-    if (id) {
-      setLoading?.(true)
-      useReports({ id, eventId, endDate, startDate }).then((res) => setData(res)).finally(() => setLoading?.(false));
+    if(loading){
+      const id = userId ? userId : user?.uid;
+      
+      if (id) {
+        setData([]);
+        useReports({ id, eventId, endDate, startDate }).then((res) => setData(res)).finally(() => setLoading(false));
+      }
     }
-  }, [user?.uid, userId, _startDate, _endDate]);
+  }, [loading]);
+  
+  useEffect(() => {
+    if(data?.length > 0 && loading === false) {
+      setComplete(true)
+    }
+  }, [data, loading])
+  
+  useEffect(() => {
+    if(isCompleted){
+      setComplete(false)
+      onPrintPage()
+    }
+  }, [isCompleted])
   // --- END: Side effects -----------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
@@ -79,6 +98,12 @@ export default function Reports({
           mountsTotal[payment?.label] = newTotalMount + 1;
         }
       });
+    });
+
+    console.log("Data", {
+      general: mountsGeneral,
+      vip: mountsVIP,
+      total: mountsTotal,
     });
 
     return {
@@ -137,7 +162,7 @@ export default function Reports({
           </Span>
           <Span customClassNames="border-b-2 border-blue-800 font-bold text-left p-5">VIP</Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
-            {ticketMounts?.vip?.["Dólares en transferencia"] ?? 0}
+            {ticketMounts?.vip?.["Dólares por transferencia"] ?? 0}
           </Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
             {ticketMounts?.vip?.["Bolívares por transferencia"] ?? 0}

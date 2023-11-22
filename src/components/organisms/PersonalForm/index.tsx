@@ -104,9 +104,16 @@ export default function PersonalForm({ formik, loading, paymentTypes, ticketType
             type="button"
             onClick={handleReportsData}
             onClickValue={true}
+            isDisabled={loading}
           >
-            <Span customClassNames="hidden lg:inline">Reporte</Span>
-            <Image src={searchIcon} alt="search" />
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Span customClassNames="hidden lg:inline">Reporte</Span>
+                <Image src={searchIcon} alt="search" />
+              </>
+            )}
           </Button>
         </Div>
         <Div customClassNames="flex flex-col w-full gap-8 justify-center p-8 pb-0">

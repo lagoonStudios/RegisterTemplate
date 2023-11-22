@@ -34,36 +34,40 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     copyStyles: true,
-    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${getUserName(user?.uid ?? '',users)}`,
+    documentTitle: `Reporte_${new Date().toISOString().slice(0, 10)}_${getUserName(user?.uid ?? "", users)}`,
   });
   // --- END: Hooks ------------------------------------------------------------
 
   // --- Local state -----------------------------------------------------------
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isCompleted, setComplete] = useState<boolean>(false);
   const [isOpenModal, setModal] = useState(false);
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-  
+
   const onCancel = () => {
     setModal(false);
     setLoading(false);
   };
-  
+
   const onLogout = () => {
     setState(0);
     logOut();
   };
-  
+
   const onPrintPage = () => handlePrint();
-  
+
   const paymentType = useMemo(() => paymentTypes?.find(({ id }) => id === formik.values.paymentType), [formik]);
   const ticketType = useMemo(() => ticketTypes?.find(({ id }) => id === formik.values.ticketType), [formik]);
-  
+
   const isAdmin = useMemo(() => {
-    if(user?.uid) return Boolean(users?.find((_user) => _user?.id === user.uid)?.roles?.some((value:any) => String(value) === 'ADMIN'))
-    return false
-}, [user, users])
+    if (user?.uid)
+      return Boolean(
+        users?.find((_user) => _user?.id === user.uid)?.roles?.some((value: any) => String(value) === "ADMIN")
+      );
+    return false;
+  }, [user, users]);
 
   const onSubmit = () => {
     submitHandler({ formik, setLoading, setModal, setState, user, ticketType: ticketType?.label });
@@ -86,13 +90,30 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
           }}
         />
       )}
-      <Reports paymentTypes={paymentTypes} ticketTypes={ticketTypes} users={users} reference={componentRef} />
+      <Reports
+        paymentTypes={paymentTypes}
+        ticketTypes={ticketTypes}
+        users={users}
+        reference={componentRef}
+        loading={loading}
+        setLoading={setLoading}
+        isCompleted={isCompleted}
+        setComplete={setComplete}
+        onPrintPage={onPrintPage}
+      />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
           <Image src={tdhLogo} alt="logo" customClassNames="w-32" />
           <Div customClassNames="flex flex-row justify-between items-center gap-3">
             <Span customClassNames="hidden lg:inline">{user?.email}</Span>
-            <Button customClassNames="hidden lg:inline" onClick={() => setState(3)} onClickValue="" isDisabled={!isAdmin}>Panel de Administrador</Button>
+            <Button
+              customClassNames="hidden lg:inline"
+              onClick={() => setState(3)}
+              onClickValue=""
+              isDisabled={!isAdmin}
+            >
+              Panel de Administrador
+            </Button>
             <Button onClick={() => onLogout()} onClickValue="">
               Cerrar Sesion
             </Button>
@@ -104,7 +125,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
           className="bg-transparent flex flex-col lg:grid lg:grid-cols-5 h-2/4 w-full gap-5"
         >
           <PersonalForm
-            onPrintPage={onPrintPage}
+            onPrintPage={() => setLoading(true)}
             formik={formik}
             loading={loading}
             paymentTypes={paymentTypes}
