@@ -41,6 +41,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState<boolean>(false);
   const [notTriggerPDF, setTrigger] = useState<boolean>(true);
+  const [valid, setValid] = useState<boolean>(false);
   const [isCompleted, setComplete] = useState<boolean>(false);
   const [isOpenModal, setModal] = useState(false);
   // --- END: Local state ------------------------------------------------------
@@ -72,6 +73,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
 
   const onSubmit = () => {
     setTrigger(false)
+    setValid(true)
     submitHandler({ formik, setLoading, setModal, setState, user, ticketType: ticketType?.label });
   };
   // --- END: Data and handlers ------------------------------------------------
@@ -102,6 +104,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
         isCompleted={isCompleted && notTriggerPDF}
         setComplete={setComplete}
         onPrintPage={onPrintPage}
+        notTriggerPDF={valid}
       />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-full flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
@@ -130,6 +133,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
             onPrintPage={() => {
               setTrigger(true)
               setLoading(true)
+              setValid(false)
             }}
             formik={formik}
             loading={loading}
