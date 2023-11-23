@@ -16,6 +16,7 @@ export interface IRegister {
   isCompleted: boolean
   setComplete: React.Dispatch<React.SetStateAction<boolean>>
   onPrintPage: () => void
+  notTriggerPDF?: boolean
 }
 
 export interface ISubmitHandler {
