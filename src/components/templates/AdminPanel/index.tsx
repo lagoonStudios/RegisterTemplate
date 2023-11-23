@@ -59,6 +59,7 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
         isCompleted={isCompleted}
         setComplete={setComplete}
         onPrintPage={() => handlePrint()}
+        notTriggerPDF={false}
       />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-screen flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
