@@ -26,7 +26,8 @@ export default function Reports({
   setLoading,
   isCompleted,
   setComplete,
-  onPrintPage
+  onPrintPage,
+  notTriggerPDF
 }: IRegister) {
   // --- Local state -----------------------------------------------------------
   const startDate = _startDate ? addDays(_startDate, 1) : new Date();
@@ -44,7 +45,7 @@ export default function Reports({
 
   // --- Side effects ----------------------------------------------------------
   useEffect(() => {
-    if(loading){
+    if(loading && notTriggerPDF === false){
       const id = userId ? userId : user?.uid;
       
       if (id) {
@@ -52,7 +53,7 @@ export default function Reports({
         useReports({ id, eventId, endDate, startDate }).then((res) => setData(res)).finally(() => setLoading(false));
       }
     }
-  }, [loading]);
+  }, [loading, notTriggerPDF]);
   
   useEffect(() => {
     if(data?.length > 0 && loading === false) {
@@ -100,12 +101,6 @@ export default function Reports({
       });
     });
 
-    console.log("Data", {
-      general: mountsGeneral,
-      vip: mountsVIP,
-      total: mountsTotal,
-    });
-
     return {
       general: mountsGeneral,
       vip: mountsVIP,
@@ -149,7 +144,7 @@ export default function Reports({
 
           <Span customClassNames="border-b-2 border-blue-800 font-bold text-left p-5">General</Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
-            {ticketMounts?.general?.["Dólares en transferencia"] ?? 0}
+            {ticketMounts?.general?.["Dólares por transferencia"] ?? 0}
           </Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
             {ticketMounts?.general?.["Bolívares por transferencia"] ?? 0}
@@ -175,7 +170,7 @@ export default function Reports({
           </Span>
           <Span customClassNames="border-b-2 border-blue-800 font-bold text-left p-5">Totales</Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
-            {ticketMounts?.total?.["Dólares en transferencia"] ?? 0}
+            {ticketMounts?.total?.["Dólares por transferencia"] ?? 0}
           </Span>
           <Span customClassNames="text-center border-b-2 border-blue-800 font-bold text-left p-5">
             {ticketMounts?.total?.["Bolívares por transferencia"] ?? 0}
@@ -190,7 +185,7 @@ export default function Reports({
         <Div customClassNames="grid grid-cols-4 items-center justify-center w-full text-center">
           <Div customClassNames="flex flex-col gap-5 font-bold">
             <Span>Transferencia $</Span>
-            <Span>{ticketMounts?.total?.["Dólares en transferencia"] ?? 0}</Span>
+            <Span>{ticketMounts?.total?.["Dólares por transferencia"] ?? 0}</Span>
           </Div>
           <Div customClassNames="flex flex-col gap-5 font-bold">
             <Span>Transferencia Bs</Span>
