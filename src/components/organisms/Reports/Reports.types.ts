@@ -11,7 +11,12 @@ export interface IRegister {
   userId?: string;
   startDate?: Date;
   endDate?: Date;
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  loading: boolean
+  isCompleted: boolean
+  setComplete: React.Dispatch<React.SetStateAction<boolean>>
+  onPrintPage: () => void
+  notTriggerPDF?: boolean
 }
 
 export interface ISubmitHandler {

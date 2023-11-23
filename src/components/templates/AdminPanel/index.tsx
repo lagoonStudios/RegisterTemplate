@@ -18,6 +18,7 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
   
   // --- Local state -----------------------------------------------------------
   const [loading, setLoading] = useState<boolean>(false);
+  const [isCompleted, setComplete] = useState<boolean>(false);
   const [userSelected, setUserSelected] = useState({ label: "Todas las cajas", value: "all" });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -29,7 +30,8 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
     logOut();
   };
   
-  const onPrintPage = () => handlePrint();
+  /* const onPrintPage = () => handlePrint(); */
+  const onPrintPage = () => setLoading(true);
   // --- END: Data and handlers ------------------------------------------------
 
   // --- Hooks -----------------------------------------------------------------
@@ -52,7 +54,12 @@ export default function AdminPanel({ setState, paymentTypes, ticketTypes, users 
         reference={componentRef}
         endDate={endDate}
         startDate={startDate}
+        loading={loading}
         setLoading={setLoading}
+        isCompleted={isCompleted}
+        setComplete={setComplete}
+        onPrintPage={() => handlePrint()}
+        notTriggerPDF={false}
       />
       <Main customClassNames="bg-desktop bg-cover bg-no-repeat bg-center h-screen flex flex-col justify-center items-center p-10 gap-8">
         <Div customClassNames="w-full flex flex-row justify-between items-center font-bold">
