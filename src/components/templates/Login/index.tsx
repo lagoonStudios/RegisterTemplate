@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { useState } from "react";
-import toastNotify from "react-hot-toast";
 import { useFormik } from "formik";
 
 import { logIn } from "@/hooks/auth";
@@ -19,13 +18,6 @@ import Image from "@/components/atoms/Image";
 
 import { sideImage, loginTopButtons, tdhLogo } from "@/assets";
 
-const validTempUsers = [
-  "paolaromano2021@gmail.com",
-  "pablo.ruiz3098@gmail.com",
-  "joseleoc123@gmail.com",
-  "rafaeljoserivascalderon@gmail.com",
-];
-
 export default function Login({ setState }: ILogin) {
   // --- Hooks -----------------------------------------------------------------
   const validationSchema = Yup.object().shape({
@@ -36,19 +28,14 @@ export default function Login({ setState }: ILogin) {
     initialValues: { email: "", password: "" },
     onSubmit: (values) => {
       setLoading(true);
-      if (validTempUsers.includes(values.email))
-        logIn(values.email, values.password)
-          .then(
-            () => setState(1),
-            (err) =>
-              //TODO Handle login error
-              console.log("err login: ", err)
-          )
-          .finally(() => setLoading(false));
-      else {
-        toastNotify.error("Usuario Inhabilitado");
-        setLoading(false);
-      }
+      logIn(values.email, values.password)
+        .then(
+          () => setState(1),
+          (err) =>
+            //TODO Handle login error
+            console.log("err login: ", err)
+        )
+        .finally(() => setLoading(false));
     },
     validationSchema,
   });
@@ -75,7 +62,7 @@ export default function Login({ setState }: ILogin) {
         </Div>
         <Div customClassNames="bg-white border border-2 rounded-3xl border-black lg:col-span-3 gap-5 w-full">
           <Div customClassNames="w-full border-b-2 border-black h-10 p-3">
-            <Image src={loginTopButtons} alt="login" />
+            <Image src={loginTopButtons} alt="login"/>
           </Div>
           <Div customClassNames="flex flex-col justify-center items-center h-full p-5">
             <H1 customClassNames="text-3xl mb-20 font-bold">Bienvenido</H1>

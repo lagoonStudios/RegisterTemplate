@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useReactToPrint } from "react-to-print";
 
@@ -47,7 +47,6 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   // --- END: Local state ------------------------------------------------------
 
   // --- Data and handlers -----------------------------------------------------
-
   const onCancel = () => {
     setModal(false);
     setLoading(false);
@@ -56,6 +55,7 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
   const onLogout = () => {
     setState(0);
     logOut();
+    window.location.reload();
   };
 
   const onPrintPage = () => handlePrint();
@@ -76,6 +76,19 @@ export default function Register({ setState, paymentTypes, ticketTypes, users }:
     setValid(true)
     submitHandler({ formik, setLoading, setModal, setState, user, ticketType: ticketType?.label });
   };
+
+  useEffect(() => {    
+    if(users?.length > 0 && user){
+      const isValid = Boolean(
+        users?.find((_user) => _user?.email === user?.email)
+      )
+
+      if(isValid ) console.log("Is Valid");
+      else onLogout();
+    }
+
+  }, [users, user])
+
   // --- END: Data and handlers ------------------------------------------------
   return (
     <>
