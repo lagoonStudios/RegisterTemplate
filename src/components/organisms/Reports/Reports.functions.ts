@@ -11,7 +11,7 @@ export const sendEmail = (to_name: string, to_email: string, id: string) => {
     qr: "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + id,
   };
   // serviceId, templateId, templateParams, publicKey
-  emailjs.send("service_5cted8p", "template_9g9dpch", templateParams, "cgmGhlqI_1tJf45Y3").then(
+  emailjs.send("service_5cted8p", "template_9g9dpch", templateParams, "w_p20ohxgwcbrO-5B").then(
     (res) => console.log("respuesta de emailJs: ", res),
     (err) => console.log("error de emailJs: ", err)
   );
