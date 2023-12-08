@@ -89,9 +89,13 @@ export function usePaymentTypes() {
     const fetchData = async () =>
       (await getDocs(q)).docs.forEach((doc) =>
         setData((prev) => {
-          const isExist = prev.some((element) => element?.id === doc.id);
+          if (doc.data().disabled === undefined || !doc.data().disabled) {
+            const isExist = prev.some((element) => element?.id === doc.id);
 
-          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+            return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+          } else {
+            return [...prev];
+          }
         })
       );
 
@@ -120,9 +124,13 @@ export function useTicketTypes() {
     const fetchData = async () =>
       (await getDocs(q)).docs.forEach((doc) =>
         setData((prev) => {
-          const isExist = prev.some((element) => element?.id === doc.id);
+          if (doc.data().disabled === undefined || !doc.data().disabled) {
+            const isExist = prev.some((element) => element?.id === doc.id);
 
-          return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+            return isExist ? [...prev] : [...prev, { ...doc.data(), id: doc.id }];
+          } else {
+            return [...prev];
+          }
         })
       );
 
