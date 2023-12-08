@@ -18,7 +18,7 @@ export default function Main() {
   return (
     <WrapperComponent
       paymentTypes={paymentData}
-      ticketTypes={ticketData}
+      ticketTypes={ticketData?.filter((ticket) => ticket?.disabled === false)}
       users={users}
       setState={setState}
       state={state}
