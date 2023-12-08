@@ -12,10 +12,10 @@ export default function SendMailBtn() {
     // serviceId, templateId, templateParams, publicKey
     emailjs
       .send(
-        "service_8rujj47",
-        "template_t29chmv",
+        "service_5cted8p",
+        "template_9g9dpch",
         templateParams,
-        "cgmGhlqI_1tJf45Y3"
+        "w_p20ohxgwcbrO-5B"
       )
       .then(
         (res) => {
